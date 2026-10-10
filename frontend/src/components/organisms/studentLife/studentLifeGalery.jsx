@@ -10,9 +10,6 @@ import { countCells, SHOWCASE_MOSAIC } from "../../../../utils/galeryMosaicLayou
 import { infrastructureCategories, infrastructureSpaces } from "@/data/studentLife/infraestructure"
 import { GalleryMosaic } from "../shared/galeryMosaic"
 
-// Ruta de la página completa de infraestructura (cámbiala a la tuya)
-const INFRASTRUCTURE_HREF = "/infrastructure"
-
 function InfrastructureGallery() {
   // Solo lo más importante: tantas fotos como celdas tiene el layout (7)
   const spaces = useMemo(
@@ -26,26 +23,19 @@ function InfrastructureGallery() {
     <section aria-label="Nuestra infraestructura" className="bg-white">
       <div className="mx-auto w-[92%] md:w-[90%] max-w-6xl pt-6 sm:pt-10 md:pt-14 pb-16 sm:pb-20 md:pb-24">
         {/* Encabezado */}
-        <div className="grid gap-6 lg:grid-cols-2 lg:items-end lg:gap-16">
-          <Motion.div
-            variants={staggerContainer}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.2 }}
-            className="flex flex-col gap-4"
-          >
-            <Paragraph
-              text="Nuestra infraestructura"
-              className="uppercase tracking-[0.3em] text-blue"
-              weight="bold"
-            />
-            <Title level="h2" weight="bold" className="font-hani">
-              Espacios pensados{" "}
-              <span className="box-decoration-clone bg-gradient-to-r from-blue-deep to-blue bg-clip-text text-transparent">
-                para tu formación
-              </span>
-            </Title>
-          </Motion.div>
+        <Motion.div
+          variants={staggerContainer}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.2 }}
+          className="grid gap-6 lg:grid-cols-2 lg:items-end lg:gap-16">
+
+          <Title
+            text="ESPACIOS PENSADOS PARA TU ROFMACIÓN"
+            level="h2" 
+            weight="bold" 
+            className="font-hani"/>
+            
 
           <Motion.div
             variants={staggerContainer}
@@ -67,7 +57,7 @@ function InfrastructureGallery() {
               className="font-poppins"
             />
           </Motion.div>
-        </div>
+        </Motion.div>
 
         {/* Mosaico */}
         <div className="mt-10 md:mt-14">
@@ -96,7 +86,7 @@ function InfrastructureGallery() {
 
         {/* Botón */}
         <ScrollReveal y={20} delay={0.1} className="mt-8 flex justify-center">
-          <Button variant="danger" href={INFRASTRUCTURE_HREF}>
+          <Button variant="danger" onClick={() => setOpenIndex(0)}>
             Ver nuestra infraestructura
           </Button>
         </ScrollReveal>
@@ -104,6 +94,7 @@ function InfrastructureGallery() {
 
       {openIndex !== null && (
         <GalleryLightbox
+          key={openIndex}
           items={spaces}
           startIndex={openIndex}
           onClose={close}
