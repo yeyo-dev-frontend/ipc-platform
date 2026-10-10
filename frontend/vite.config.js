@@ -12,6 +12,15 @@ export default defineConfig({
     react(),
     tailwindcss()
   ],
+  server: {
+    watch: {
+      // Espera a que terminen las escrituras desde Windows sobre WSL antes de recargar.
+      awaitWriteFinish: {
+        stabilityThreshold: 200,
+        pollInterval: 100,
+      },
+    },
+  },
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),

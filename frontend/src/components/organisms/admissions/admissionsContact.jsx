@@ -1,4 +1,4 @@
-import { AdmissionsContactIntro } from "@/components/molecules/admissions/admissionsContactIntro";
+import { AdmissionsContactIntro } from "@/components/organisms/admissions/admissionsContactIntro";
 import { AdmissionsContactForm } from "@/components/molecules/admissions/admissionsContactForm";
 
 function AdmissionsContact() {
