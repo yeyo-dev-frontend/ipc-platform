@@ -1,5 +1,9 @@
 # Estado y evolución de IPC Platform
 
+### Privacidad: borrador institucional — 10 de octubre de 2026
+
+La ruta /privacy muestra una propuesta identificada como borrador, accesible desde el footer compacto. PrivacyPage reutiliza Title, Paragraph y MyTemplate; el contenido vive en data/privacy.js. Incluye la responsable designada por el usuario, Deiny Emily Cabos Cabanillas, almacenamiento previsto en la base institucional y orientación de admisión por llamada o correo, con ubicación para evaluar facilidades. Pendientes: identidad legal del titular, canal de privacidad operativo, banco de datos, conservación, accesos, proveedores y transferencias. No se inventa un correo ni se implementa consentimiento o recepción de datos mediante este cambio. Debe completarse y validarse antes de usarse como política definitiva.
+
 ### Recarga de desarrollo y ubicación de contacto — 10 de octubre de 2026
 
 AdmissionsContactIntro vive en organisms/admissions y compone las moléculas AdmissionsContactHeading y AdmissionsContactVisual. AdmissionsContact importa esa ubicación; esta nota sustituye la ubicación anterior indicada abajo. Se conserva el formulario compartido y su distribución.

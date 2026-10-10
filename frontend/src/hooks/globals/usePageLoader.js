@@ -54,7 +54,7 @@ export function usePageLoader({
     const finish = () => {
       setProgress(100);
       exitTimer = setTimeout(() => {
-        document.body.style.overflow = previousOverflow; // ← aquí
+        document.body.style.overflow = previousOverflow;
         setVisible(false);
         onDoneRef.current?.();
       }, exitDelay);
@@ -63,10 +63,6 @@ export function usePageLoader({
       } catch {
         /* sin storage: no pasa nada */
       }
-      exitTimer = setTimeout(() => {
-        setVisible(false);
-        onDoneRef.current?.();
-      }, exitDelay);
     };
 
     const frame = () => {

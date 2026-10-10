@@ -1,4 +1,5 @@
 import { GiSlicingArrow } from "react-icons/gi";
+import { Link } from "react-router-dom";
 import { FooterBrand } from "../../molecules/footer/footerBrand";
 import { FooterCareers } from "../../molecules/footer/footerCareers";
 import { FooterSchedule } from "../../molecules/footer/footerSchedule";
@@ -10,8 +11,7 @@ function Footer() {
   };
 
   return (
-    <footer className="relative isolate overflow-hidden bg-[#232E42] text-white">
-      {/* Botón scroll-to-top */}
+    <footer className="relative isolate overflow-hidden bg-blue-deep text-white">
       <button
         type="button"
         onClick={scrollToTop}
@@ -22,7 +22,7 @@ function Footer() {
           rounded-full border border-white/30
           text-white/80
           transition-all duration-200
-          hover:bg-white hover:text-[#232E42] hover:border-white hover:-translate-y-0.5
+          hover:bg-white hover:text-blue-deep hover:border-white hover:-translate-y-0.5
           focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white
         "
       >
@@ -38,9 +38,18 @@ function Footer() {
         <FooterSocial />
       </div>
 
-      <div className="flex items-center justify-between relative border-t border-white/90 px-5 py-4 lg:py-3">
-        <small className="font-euro space-1 text-sm"><i>© 2026 Instituto Privado Celendín · Todos los derechos reservados.</i></small>
-        <small className="text-blue/30 font-hani text-sm"><i>Desarrolladores: Wynsley & Yerson</i></small>
+      <div className="relative flex flex-wrap items-center justify-center gap-x-6 gap-y-1 border-t border-neutral-white/20 px-20 py-3 text-center font-poppins sm:px-24">
+        <small className="text-xs leading-relaxed text-neutral-white/90">
+          © 2026 Instituto Privado Celendín
+        </small>
+        <small className="text-xs leading-relaxed text-neutral-white/70">
+          <Link to="/privacy" className="text-neutral-white/90 underline underline-offset-4 transition-colors hover:text-neutral-white focus-visible:outline-2 focus-visible:outline-offset-4">
+            Política de privacidad (borrador)
+          </Link>
+        </small>
+        <small className="text-xs leading-relaxed text-neutral-white/70">
+          Desarrollado por <span className="text-neutral-white/90">Wynsley &amp; Yerson</span>
+        </small>
       </div>
     </footer>
   );

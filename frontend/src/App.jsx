@@ -12,6 +12,7 @@ import { AlumniPage } from "./components/pages/alumniPage"
 import { AboutUsPage } from "./components/pages/aboutUsPage"
 import { EventsPage } from "./components/pages/eventsPage"
 import { AdmissionPage } from "./components/pages/admissionsPage"
+import { PrivacyPage } from "./components/pages/privacyPage"
 import {StudentLivePage } from "./components/pages/studentLivePage"
 
 /* Carreras */
@@ -20,12 +21,9 @@ import { AccountingPage } from "./components/pages/careers/accounting/accounting
 import { ComputerSciencePage } from "@/components/pages/careers/computerScience/computerSciencePage"
 import { LanguageTranslationPage } from "@/components/pages/careers/languageTranslation/languageTranslationPage"
 import { SocialFloatings } from "./components/molecules/shared/SocialsFloatings"
-import { useState } from "react"
-import { shouldShowLoader } from "./hooks/globals/usePageLoader"
 
 function App() {
 
-  const [ready, setReady] = useState(() => !shouldShowLoader());
 
   const pages = [
     { path: '/', element: <HomePage /> },
@@ -33,6 +31,7 @@ function App() {
     { path: '/about-us', element: <AboutUsPage /> },
     { path: '/events', element: <EventsPage /> },
     { path: '/admissions', element: <AdmissionPage /> },
+    { path: '/privacy', element: <PrivacyPage /> },
     { path: '/student-life', element: <StudentLivePage /> },
 
     // Carreras
@@ -44,7 +43,7 @@ function App() {
 
   return (
     <>
-      <PageLoader onDone={() => setReady(true)}/>
+      <PageLoader/>
       <SocialFloatings />
       <AnimatePresence mode="wait" initial={false}>
         <Routes>
