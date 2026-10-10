@@ -9,7 +9,6 @@ function AdmissionsPosterPhoto({ src, alt }) {
         alt={alt}
         fill
         className="absolute max-w-none w-[227.34375%] h-[188.4375%] left-[-121.09375%] top-[-14.0625%] object-fill"
-        
       />
       <BannerBgCurve
         design={9}

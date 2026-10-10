@@ -1,5 +1,57 @@
 # Estado y evolución de IPC Platform
 
+### Corrección de distribución y desplegables — 10 de octubre de 2026
+
+Modal y Admisión comparten el mismo ContactForm compacto por filas: nombre/correo, teléfono/dirección, carrera/turno y mensaje a todo el ancho. Inicio conserva sus grupos. Se corrige la distribución vertical de carrera/turno introducida al extraer los grupos. Los select siguen siendo nativos y de peso normal, con cursor de selección, flecha azul y, en la variante clara, borde visible y respuesta al hover/foco. No se crea un menú personalizado ni otro formulario.
+
+### Unificación del formulario original — 10 de octubre de 2026
+
+Se elimina organisms/shared/contactForm y su variante signature. La composición original por grupos se concentra en molecules/shared/contactForm, consumida por HomeMessage, ModalMessage y AdmissionsContactForm. Se conservan el catálogo, hook, Toast, ContactSteps y botón danger. Layout home mantiene la distribución original de Inicio; compact distribuye los grupos del modal en dos columnas desde sm y una en móvil. La variante light solo adapta superficies y colores para Admisión.
+
+AdmissionsContact solo compone AdmissionsContactIntro y AdmissionsContactForm, en molecules/admissions; se conservan la imagen y los ajustes locales del marco y textos. Select muestra opciones con Poppins regular (400), sin la negrita anterior. No cambia el contrato HTTP ni los valores de carreras/turnos. Las notas anteriores sobre el formulario alternativo quedan sustituidas por esta organización.
+
+### Restitución del botón Enviar — 10 de octubre de 2026
+
+Por petición del usuario, AdmissionsContact y ModalMessage vuelven al botón predeterminado de ContactForm: Button danger con el texto «Enviar», esquinas opuestas redondeadas y hover naranja. Se retira la activación de signature en ambos consumidores. Inicio y el átomo Button no se modifican; se conserva la imagen exclusiva del formulario.
+
+### Alcance del botón de contacto — 10 de octubre de 2026
+
+El diseño de cápsula queda dentro de ContactForm y se activa explícitamente con submitStyle="signature" solo en AdmissionsContact y ModalMessage. submitLabel conserva «Solicitar información» en Admisión y «Enviar» en los modales. El valor predeterminado standard reutiliza Button danger; se retira la variante global action. HomeMessage y los demás botones conservan su diseño.
+
+### Contacto: botón e imagen propios — 10 de octubre de 2026
+
+ContactForm usa la nueva variante compatible `Button action`: cápsula azul, flecha en círculo claro, acento naranja en hover/foco y estado de envío con icono de carga que respeta movimiento reducido. Admisión y modal comparten el diseño. AdmissionsContact sustituye la fotografía repetida por `admissions-advising.png`, generada con ImageGen para esta sección; prompt y condición ilustrativa en assets/images/admissions/README.md. Se conserva Image y su respaldo institucional.
+
+## Admisión: cierre de contacto — 10 de octubre de 2026
+
+Verificación: build, ESLint del alcance y diff --check correctos. Revisadas la sección a 1440/320 px y la apertura/cierre del modal a 390 px, sin desbordamiento horizontal; 14 controles simultáneos con 14 IDs únicos. Un envío vacío muestra siete errores y un resumen accesible sin llamar a la API. No se enviaron datos ni se certificó recepción en backend.
+
+`AdmissionsContact` cierra la página tras la guía con fondo claro, imagen ilustrativa existente mediante Image y formulario. No incluye Yape ni pagos. `ContactForm({ appearance, showSteps, onCancel })`, en organisms/shared, reutiliza CONTACT_FORM_GROUPS, FormField y useContactForm; lo consumen Admisión (light) y ModalMessage (dark, con pasos y cancelar). Inicio conserva su composición, campos y hook compartidos.
+
+FormField relaciona etiquetas, controles y errores mediante useId, admite errores booleanos o mensajes, y aporta autocompletado. useContactForm conserva mensajes de validación en fieldErrors y no borra datos tras fallar el envío. El contrato de campos permanece: nombre completo, correo, teléfono, dirección, carrera, turno y mensaje, todos requeridos por el validador existente. No se agrega almacenamiento ni una API nueva: el envío real sigue pendiente de la API /contact configurada en localhost:3000; la validación de correo existente sigue limitada a gmail/hotmail/yahoo. La página indica que la consulta no completa la inscripción.
+
+### Guía de admisión: curva y acentos azules — 10 de octubre de 2026
+
+El ajuste posterior cambia el remate a `BannerBgCurve` diseño 6, una onda asimétrica clara con banda azul institucional. Título destacado, numeración, requisitos y modalidad usan `blue-light` para mantener contraste sobre el fondo casi negro; el naranja se conserva únicamente en el antetítulo «Guía de admisión». No cambia la estructura, las imágenes ni el contenido.
+
+### Ajuste visual de la guía de admisión — 10 de octubre de 2026
+
+La petición posterior sustituye `blue-deep` por el token `charcoal` (#121416), casi negro, y elimina las esquinas redondeadas. El remate inferior reutiliza `BannerBgCurve` diseño 7 con bandas azul institucional/naranja y base clara; no se modifica el componente compartido. Se incorporan dos imágenes ilustrativas existentes (estudiantes de Sobre nosotros y preparación de Traducción), centralizadas en `admissionProcessImages` y renderizadas mediante `Image`, con alt descriptivo, espacio reservado y respaldo institucional. Se mantienen requisitos, pasos, modalidad, turnos y ausencia de botones. Build y ESLint del alcance correctos; persiste la advertencia conocida del bundle.
+
+## Admisión: guía del proceso — 10 de octubre de 2026
+
+Implementado `AdmissionsProcess` después de `AdmissionsExam`: una sección continua sobre `blue-deep`, con entrada curva sobre el azul institucional y salida curva hacia el fondo claro de futuros bloques. Composición editorial con requisitos a la izquierda, cuatro pasos numerados a la derecha y modalidad al pie; en móvil se lee en una columna. Sin botones, formulario ni nuevas dependencias.
+
+`data/admissions/process.js` centraliza requisitos y pasos procedentes de la maqueta, y la modalidad presencial para todas las carreras con turnos mañana/tarde/noche, confirmada por el usuario en esta sesión. Los requisitos de la maqueta siguen siendo contenido de referencia; no se añaden plazos, métodos de pago, horarios por carrera ni condiciones de matrícula. `AdmissionsRequirements` y `AdmissionsProcessSteps` presentan las listas reutilizando Title y Paragraph. El formulario inferior queda pendiente para una tarea posterior.
+
+Referencia visual consultada: [Ochi](https://ochi.design/), por su jerarquía tipográfica y composición editorial; la paleta, curvas y contenido se adaptan al IPC. ESLint del alcance y build correctos, con el aviso de tamaño del bundle ya existente. Inspección visual a 1440, 390 y 320 px, sin desbordamiento horizontal ni errores de consola; comprobada la ausencia de botones y enlaces en esta sección.
+
+## Admisión: tarjeta de costos tipo cuaderno — 10 de octubre de 2026
+
+`PriceSummaryCard` presenta una hoja azul institucional con perforaciones transparentes, esquina doblada azul claro y sombra suave. Conserva sus props y el catálogo de importes; muestra la moneda antes del valor, conceptos encima en escritorio y filas en móvil. `AdmissionsHero`, su único consumidor actual, utiliza «Inversión en tu formación», elimina la frase inferior y limita el ancho a `max-w-5xl`. La geometría está aislada en las clases `price-summary-note` de `index.css`; no se añaden imágenes ni dependencias.
+
+ESLint del alcance y build correctos (persiste el aviso de tamaño del bundle). Vista revisada en escritorio y móvil, sin desbordamiento horizontal a 1440 y 320 px ni errores de consola.
+
 ## Modularización del afiche — 9 de octubre de 2026
 
 `AdmissionsExamCard` queda como composición de 26 líneas: `AdmissionsPosterHeader` agrupa fotografía y títulos, `AdmissionsPosterRegistration` presenta fecha, contacto y botón, y `AdmissionsPosterCareers` resuelve el listado desde el catálogo compartido. `AdmissionsPosterPhoto` mantiene el encuadre y reutiliza `BannerBgCurve` diseño 9 para las tres superficies curvas; se elimina el SVG inline de la tarjeta. La geometría, los colores, `@container`, datos y callback del modal se conservan. ScrollReveal sigue en el organismo de la sección.

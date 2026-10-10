@@ -1,5 +1,64 @@
 @import "tailwindcss";
 
+.contact-form input,
+.contact-form select,
+.contact-form textarea {
+  width: 100%;
+  min-width: 0;
+}
+.contact-form :is(input, select, textarea):focus-visible {
+  outline: 2px solid var(--color-blue-light);
+  outline-offset: 2px;
+}
+.contact-form--light label { color: var(--color-blue-dark); }
+.contact-form--light :is(input, select, textarea) {
+  border-radius: 0.375rem;
+  background: var(--color-neutral-light);
+  min-height: 3rem;
+}
+.contact-form--light textarea { padding-top: 0.75rem; }
+.contact-form--light :is(input, select, textarea):not([aria-invalid="true"]) {
+  border-color: color-mix(in srgb, var(--color-blue-dark) 18%, transparent);
+}
+.contact-form--light select {
+  background-color: var(--color-neutral-white);
+}
+.contact-form--light select:not([aria-invalid="true"]) {
+  border-color: color-mix(in srgb, var(--color-blue-dark) 45%, transparent);
+}
+.contact-form--light select:not([aria-invalid="true"]):is(:hover, :focus) {
+  border-color: var(--color-blue);
+  background-color: color-mix(in srgb, var(--color-blue-light) 8%, var(--color-neutral-white));
+}
+
+.admissions-process .admissions-process__title {
+  font-size: clamp(2.75rem, 5.4vw, 5rem);
+  line-height: 0.98;
+  letter-spacing: -0.025em;
+}
+
+/* Hoja de costos: perforaciones transparentes y esquina doblada. */
+.price-summary-note__paper {
+  --note-fold: 2rem;
+  clip-path: polygon(0 0, calc(100% - var(--note-fold)) 0, 100% var(--note-fold), 100% 100%, 0 100%);
+  mask-image: radial-gradient(circle at 1rem 1rem, transparent 0.25rem, black 0.3rem);
+  mask-size: 100% 2rem;
+  mask-repeat: repeat-y;
+}
+
+.price-summary-note__fold {
+  width: var(--note-fold);
+  height: var(--note-fold);
+  background: var(--color-blue-light);
+  clip-path: polygon(0 0, 0 100%, 100% 100%);
+}
+
+@media (min-width: 40rem) {
+  .price-summary-note__paper {
+    --note-fold: 2.75rem;
+  }
+}
+
 /* =========================
     FUENTES
 ========================= */
@@ -59,6 +118,7 @@ html {
   --color-neutral-light: #f5f5f5;
   --color-neutral-dark: #332c25;
   --color-neutral-black: #1f2937;
+  --color-charcoal: #121416;
 
   /* Fuentes */
   --font-poppins: "Poppins", sans-serif;

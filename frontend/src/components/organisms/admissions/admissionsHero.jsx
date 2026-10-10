@@ -24,16 +24,9 @@ function AdmissionsHero({ onRegister }) {
         <AdmissionsHeroContent onRegister={onRegister} />
       </section>
       <PriceSummaryCard
-        title={
-          <>
-            Nuestros Servicios
-            <br />
-            Académicos
-          </>
-        }
+        title="Inversión en tu formación"
         items={services}
-        footer="Asegura tu vacante y forma parte de nuestra comunidad educativa."
-        className="relative z-10 mx-auto -mt-12 w-[92%] max-w-7xl sm:-mt-16"
+        className="z-10 mx-auto -mt-12 w-[92%] max-w-5xl sm:-mt-16"
       />
     </div>
   );

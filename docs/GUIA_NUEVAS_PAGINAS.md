@@ -1,5 +1,9 @@
 # Guía para crear páginas y continuar en nuevas ramas
 
+### Formulario de contacto compartido — 10 de octubre de 2026
+
+Reutilizar `molecules/shared/contactForm.jsx` → ContactForm, composición única extraída del formulario original por grupos. Inicio usa layout="home" y showSteps; modal usa showSteps y onCancel; Admisión solo appearance="light". Conserva ContactSteps, Toast, FormField, catálogo, hook y Button danger («Enviar»). No crear versiones alternativas del botón o duplicar los mapas de campos en consumidores. FormField genera IDs únicos para coexistir con el modal; fieldErrors puede contener mensajes o booleanos. No declarar operativo el envío sin validar la API /contact; la conexión real permanece pendiente.
+
 Guía actualizada el 5 de octubre de 2026. La revisión inicial del 29 de septiembre se amplía con los contratos actuales. Consultar primero [ESTADO_PROYECTO.md](ESTADO_PROYECTO.md) y [AGENTS.md](../AGENTS.md). El código del checkout tiene prioridad sobre inventarios antiguos.
 
 ## 1. Antes de implementar

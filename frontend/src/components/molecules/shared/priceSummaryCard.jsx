@@ -10,45 +10,56 @@ function PriceSummaryCard({
   className = "",
 }) {
   return (
-    <div className={twMerge("bg-black px-5 py-3 font-hani sm:px-8", className)}>
-      <div className="grid items-center gap-5 lg:grid-cols-4 lg:gap-0">
-        <Title
-          level="h2"
-          size="compact"
-          variant="secondary"
-          weight="bold"
-          align="center"
-          className="px-3 leading-snug"
-        >
-          {title}
-        </Title>
-        <dl className="grid min-w-0 auto-cols-fr grid-flow-col divide-x-2 divide-neutral-white/80 lg:col-span-3 lg:border-l-2 lg:border-neutral-white/80">
-          {items.map(({ text, value }) => (
-            <div
-              key={text}
-              className="flex min-w-0 flex-col-reverse items-center gap-2 px-1 py-3 sm:gap-3 sm:px-4"
-            >
-              <dt className="text-center text-sm text-neutral-white sm:text-xl lg:text-2xl">
-                {text.trim()}
-              </dt>
-              <dd className="whitespace-nowrap text-center text-[1.75rem] font-bold leading-none text-orange xs:text-3xl sm:text-5xl lg:text-6xl">
-                {value} {currency}
-              </dd>
-            </div>
-          ))}
-        </dl>
-      </div>
-      {footer && (
-        <Paragraph
-          size="comfortable"
-          variant="inherit"
-          weight="bold"
-          align="center"
-          className="mt-1 border-t-2 border-neutral-white/80 pt-3 leading-snug text-orange"
-        >
-          {footer}
-        </Paragraph>
+    <div
+      className={twMerge(
+        "price-summary-note relative font-hani drop-shadow-lg",
+        className,
       )}
+    >
+      <div className="price-summary-note__paper relative bg-blue-dark py-6 pr-7 pl-11 sm:py-7 sm:pr-12 sm:pl-16">
+        <span
+          aria-hidden="true"
+          className="price-summary-note__fold pointer-events-none absolute right-0 top-0"
+        />
+        <div className="grid gap-5">
+          <Title
+            level="h2"
+            size="compact"
+            variant="primary"
+            weight="bold"
+            align="left"
+            className="pr-6 leading-snug"
+          >
+            {title}
+          </Title>
+          <dl className="grid min-w-0 divide-y divide-neutral-white/20 sm:auto-cols-fr sm:grid-flow-col sm:divide-x sm:divide-y-0">
+            {items.map(({ text, value }) => (
+              <div
+                key={text}
+                className="flex min-w-0 items-center justify-between gap-3 py-3 sm:flex-col sm:items-start sm:gap-2 sm:px-7 sm:py-0 sm:first:pl-0 sm:last:pr-0"
+              >
+                <dt className="font-poppins text-sm text-neutral-white sm:text-base">
+                  {text.trim()}
+                </dt>
+                <dd className="whitespace-nowrap text-3xl font-bold leading-none text-orange sm:text-4xl lg:text-5xl">
+                  <span className="text-[0.6em]">{currency}</span> {value}
+                </dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+        {footer && (
+          <Paragraph
+            size="comfortable"
+            variant="inherit"
+            weight="bold"
+            align="center"
+            className="mt-5 border-t border-neutral-white/20 pt-4 leading-snug text-neutral-white"
+          >
+            {footer}
+          </Paragraph>
+        )}
+      </div>
     </div>
   );
 }

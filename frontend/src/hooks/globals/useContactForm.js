@@ -71,11 +71,7 @@ function useContactForm() {
     const { valid, errors, firstMessage } = await validate();
 
     if (!valid) {
-      const markedErrors = Object.keys(errors).reduce((acc, key) => {
-        acc[key] = true;
-        return acc;
-      }, {});
-      setFieldErrors(markedErrors);
+      setFieldErrors(errors);
       setErrorStep(activeStep);
       setToast({ visible: true, type: "error", message: firstMessage });
       return;
@@ -106,7 +102,6 @@ function useContactForm() {
         type: "error",
         message: err.message || "Ocurrió un error al enviar. Intenta de nuevo.",
       });
-      setTimeout(reset, 3000);
     } finally {
       setSubmitting(false);
     }
