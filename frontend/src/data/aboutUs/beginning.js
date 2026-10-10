@@ -1,5 +1,9 @@
-// src/data/aboutUs/beginning.js
-import { FaLandmark, FaChartLine, FaGraduationCap, FaRocket } from "react-icons/fa";
+import {
+  FaLandmark,
+  FaChartLine,
+  FaGraduationCap,
+  FaRocket,
+} from "react-icons/fa";
 
 export const beginning = [
   {

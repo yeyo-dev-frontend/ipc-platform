@@ -1,6 +1,5 @@
 import computingLabBackgroundImage from "@assets/images/careers/computerScience/computing-lab-background.png";
 import computingStudentImage from "@assets/images/careers/computerScience/computing-student.png";
-// Contenido editorial del hero; las imágenes generadas son ilustrativas.
 const computerScienceHero = {
   eyebrow: "Tu futuro empieza aquí",
   tagline: {

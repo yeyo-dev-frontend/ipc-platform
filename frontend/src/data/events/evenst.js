@@ -221,14 +221,28 @@ export const EVENTS = [
 const TZ = "America/Lima";
 
 const dateFmt = new Intl.DateTimeFormat("es-PE", {
-  day: "numeric", month: "long", year: "numeric", timeZone: TZ,
+  day: "numeric",
+  month: "long",
+  year: "numeric",
+  timeZone: TZ,
 });
 const timeFmt = new Intl.DateTimeFormat("es-PE", {
-  hour: "numeric", minute: "2-digit", timeZone: TZ,
+  hour: "numeric",
+  minute: "2-digit",
+  timeZone: TZ,
 });
-const dayFmt = new Intl.DateTimeFormat("es-PE", { day: "numeric", timeZone: TZ });
-const monthFmt = new Intl.DateTimeFormat("es-PE", { month: "long", timeZone: TZ });
-const yearFmt = new Intl.DateTimeFormat("es-PE", { year: "numeric", timeZone: TZ });
+const dayFmt = new Intl.DateTimeFormat("es-PE", {
+  day: "numeric",
+  timeZone: TZ,
+});
+const monthFmt = new Intl.DateTimeFormat("es-PE", {
+  month: "long",
+  timeZone: TZ,
+});
+const yearFmt = new Intl.DateTimeFormat("es-PE", {
+  year: "numeric",
+  timeZone: TZ,
+});
 
 export const formatEventDate = (date) => dateFmt.format(new Date(date));
 export const formatEventTime = (date) => timeFmt.format(new Date(date));

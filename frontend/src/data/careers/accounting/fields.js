@@ -45,10 +45,7 @@ const careerFunctions = [
   },
   {
     title: "Auditoría y control",
-    items: [
-      "Auxiliar de auditoría.",
-      "Encargado(a) de control interno.",
-    ],
+    items: ["Auxiliar de auditoría.", "Encargado(a) de control interno."],
   },
   {
     title: "Gestión financiera",

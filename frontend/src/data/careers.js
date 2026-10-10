@@ -13,15 +13,18 @@ export const careers = [
       highlights: [
         {
           title: "Gestión empresarial",
-          description: "Diseña estrategias y toma decisiones con base en datos y objetivos claros.",
+          description:
+            "Diseña estrategias y toma decisiones con base en datos y objetivos claros.",
         },
         {
           title: "Innovación",
-          description: "Identifica oportunidades para optimizar procesos y fortalecer resultados.",
+          description:
+            "Identifica oportunidades para optimizar procesos y fortalecer resultados.",
         },
         {
           title: "Liderazgo",
-          description: "Desarrolla habilidades para coordinar equipos y liderar proyectos con impacto.",
+          description:
+            "Desarrolla habilidades para coordinar equipos y liderar proyectos con impacto.",
         },
       ],
     },

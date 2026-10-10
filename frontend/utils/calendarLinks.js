@@ -18,7 +18,10 @@ const getEnd = (event) =>
 
 /** 2026-11-10T14:00:00.000Z -> 20261110T140000Z */
 const toUtcStamp = (date) =>
-  new Date(date).toISOString().replace(/[-:]/g, "").replace(/\.\d{3}/, "");
+  new Date(date)
+    .toISOString()
+    .replace(/[-:]/g, "")
+    .replace(/\.\d{3}/, "");
 
 function buildDescription(event) {
   const lines = [event.shortDescription ?? ""];
@@ -102,7 +105,9 @@ export function buildIcs(events) {
   const list = Array.isArray(events) ? events : [events];
   const stamp = toUtcStamp(new Date());
   const host =
-    typeof window !== "undefined" ? window.location.hostname || "eventos" : "eventos";
+    typeof window !== "undefined"
+      ? window.location.hostname || "eventos"
+      : "eventos";
 
   const lines = [
     "BEGIN:VCALENDAR",
@@ -120,12 +125,15 @@ export function buildIcs(events) {
 /** Descarga un evento (o varios) como archivo .ics. */
 export function downloadIcs(events, filename) {
   const list = Array.isArray(events) ? events : [events];
-  const blob = new Blob([buildIcs(list)], { type: "text/calendar;charset=utf-8" });
+  const blob = new Blob([buildIcs(list)], {
+    type: "text/calendar;charset=utf-8",
+  });
   const url = URL.createObjectURL(blob);
 
   const link = document.createElement("a");
   link.href = url;
-  link.download = filename ?? (list.length === 1 ? `${list[0].id}.ics` : "eventos.ics");
+  link.download =
+    filename ?? (list.length === 1 ? `${list[0].id}.ics` : "eventos.ics");
   document.body.appendChild(link);
   link.click();
   link.remove();

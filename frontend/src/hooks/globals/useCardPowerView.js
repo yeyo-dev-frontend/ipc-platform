@@ -32,10 +32,10 @@ function useCardsPerView(variant = "default") {
   const config = useMemo(
     () =>
       typeof variant === "string"
-        ? VARIANTS[variant] ?? VARIANTS.default
+        ? (VARIANTS[variant] ?? VARIANTS.default)
         : variant,
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [key]
+    [key],
   );
 
   const [cardsPerView, setCardsPerView] = useState(() => getCount(config));

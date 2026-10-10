@@ -11,8 +11,14 @@ const keyFmt = new Intl.DateTimeFormat("en-US", {
 });
 
 // Estos formateadores trabajan sobre fechas "de calendario" (medianoche UTC).
-const monthFmt = new Intl.DateTimeFormat("es-PE", { month: "long", timeZone: "UTC" });
-const yearFmt = new Intl.DateTimeFormat("es-PE", { year: "numeric", timeZone: "UTC" });
+const monthFmt = new Intl.DateTimeFormat("es-PE", {
+  month: "long",
+  timeZone: "UTC",
+});
+const yearFmt = new Intl.DateTimeFormat("es-PE", {
+  year: "numeric",
+  timeZone: "UTC",
+});
 const shortFmt = new Intl.DateTimeFormat("es-PE", {
   day: "numeric",
   month: "short",
@@ -69,7 +75,11 @@ export function startOfWeek(key) {
   return addDays(key, -dayOfWeek);
 }
 
-const makeCell = (key, inMonth) => ({ key, day: Number(key.slice(8)), inMonth });
+const makeCell = (key, inMonth) => ({
+  key,
+  day: Number(key.slice(8)),
+  inMonth,
+});
 
 /** 42 celdas (6 semanas) para la vista de mes. */
 export function buildMonthGrid(key) {

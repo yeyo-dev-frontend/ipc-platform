@@ -10,5 +10,5 @@ export const MISSION_VISSION = [
     description: `Ser reconocida al [año, ej. 2030] como una institución superior técnica líder en excelencia 
         académica e innovación tecnológica, referente por la alta empleabilidad de sus egresados, la calidad de sus 
         alianzas estratégicas con el sector productivo y su contribución al desarrollo sostenible del país.`,
-  }
-]
+  },
+];

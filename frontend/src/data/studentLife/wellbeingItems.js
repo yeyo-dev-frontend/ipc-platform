@@ -1,4 +1,10 @@
-import { FiCompass, FiHeart, FiSmile, FiTrendingUp, FiUsers } from "react-icons/fi"
+import {
+  FiCompass,
+  FiHeart,
+  FiSmile,
+  FiTrendingUp,
+  FiUsers,
+} from "react-icons/fi";
 
 export const wellbeingItems = [
   {
@@ -36,4 +42,4 @@ export const wellbeingItems = [
     description:
       "Fomentamos el respeto, la responsabilidad y la colaboración como parte de nuestra comunidad educativa.",
   },
-]
+];

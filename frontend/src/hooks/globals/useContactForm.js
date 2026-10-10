@@ -26,12 +26,12 @@ function useContactForm() {
   const setValue = (name) => (e) => {
     let val = e.target.value;
 
-  if (name === "phone") {
-    // Solo dígitos y un '+' opcional al inicio
-    val = val.replace(/[^\d+]/g, "");
-    // Si hay más de un '+', deja solo el primero (y solo al inicio)
-    val = val.replace(/(?!^)\+/g, "");
-  }
+    if (name === "phone") {
+      // Solo dígitos y un '+' opcional al inicio
+      val = val.replace(/[^\d+]/g, "");
+      // Si hay más de un '+', deja solo el primero (y solo al inicio)
+      val = val.replace(/(?!^)\+/g, "");
+    }
     setValues((prev) => ({ ...prev, [name]: val }));
     setFieldErrors((prev) => (prev[name] ? { ...prev, [name]: false } : prev));
     setErrorStep((prev) => (prev ? null : prev));
@@ -51,7 +51,8 @@ function useContactForm() {
       return {
         valid: false,
         errors,
-        firstMessage: err.details[0]?.message || "Revisa los campos del formulario.",
+        firstMessage:
+          err.details[0]?.message || "Revisa los campos del formulario.",
       };
     }
   };
@@ -93,7 +94,8 @@ function useContactForm() {
       setToast({
         visible: true,
         type: "success",
-        message: "Hemos recibido tu solicitud, pronto nos pondremos en contacto contigo.",
+        message:
+          "Hemos recibido tu solicitud, pronto nos pondremos en contacto contigo.",
       });
       setTimeout(reset, 3000);
     } catch (err) {

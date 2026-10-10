@@ -4,7 +4,8 @@ export const OUR_TEAM = [
     name: "Rosa Delgado Cabrera",
     profession: "Contadora Pública",
     position: "Directora Académica",
-    description: "Más de 15 años formando contadores con enfoque práctico y ético.",
+    description:
+      "Más de 15 años formando contadores con enfoque práctico y ético.",
     photo: "https://i.pravatar.cc/300?img=47",
     subjects: [
       "Contabilidad General",
@@ -60,7 +61,8 @@ export const OUR_TEAM = [
     name: "Patricia Huamán Soto",
     profession: "Licenciada en Educación, Idioma Inglés",
     position: "Coordinadora de Idiomas",
-    description: "Certificada en enseñanza del inglés con metodologías comunicativas.",
+    description:
+      "Certificada en enseñanza del inglés con metodologías comunicativas.",
     photo: "https://i.pravatar.cc/300?img=9",
     subjects: [
       "Inglés Básico",
@@ -88,7 +90,8 @@ export const OUR_TEAM = [
     name: "Gladys Ortiz Tello",
     profession: "Licenciada en Administración",
     position: "Docente de Gestión Empresarial",
-    description: "Guía a sus estudiantes en liderazgo y planificación estratégica.",
+    description:
+      "Guía a sus estudiantes en liderazgo y planificación estratégica.",
     photo: "https://i.pravatar.cc/300?img=1",
     subjects: [
       "Liderazgo y Trabajo en Equipo",
@@ -116,7 +119,8 @@ export const OUR_TEAM = [
     name: "Sandra Becerra Alarcón",
     profession: "Traductora e Intérprete",
     position: "Docente de Idiomas",
-    description: "Traductora con experiencia en entornos turísticos y comerciales.",
+    description:
+      "Traductora con experiencia en entornos turísticos y comerciales.",
     photo: "https://i.pravatar.cc/300?img=20",
     subjects: [
       "Técnicas de Traducción",
@@ -144,7 +148,8 @@ export const OUR_TEAM = [
     name: "Carmen Zegarra Linares",
     profession: "Psicóloga",
     position: "Tutora y Bienestar Estudiantil",
-    description: "Acompaña el desarrollo personal y académico de cada estudiante.",
+    description:
+      "Acompaña el desarrollo personal y académico de cada estudiante.",
     photo: "https://i.pravatar.cc/300?img=25",
     subjects: [
       "Desarrollo Personal",

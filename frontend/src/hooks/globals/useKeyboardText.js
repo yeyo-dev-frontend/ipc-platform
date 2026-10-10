@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react";
 
 function useTypewriter(text, options = {}) {
   const {
@@ -7,40 +7,40 @@ function useTypewriter(text, options = {}) {
     pauseAfterTyping = 4000,
     pauseAfterDeleting = 1000,
     randomTyping = true,
-  } = options
+  } = options;
 
-  const [displayed, setDisplayed] = useState("")
-  const indexRef = useRef(0)
-  const deletingRef = useRef(false)
+  const [displayed, setDisplayed] = useState("");
+  const indexRef = useRef(0);
+  const deletingRef = useRef(false);
 
   useEffect(() => {
-    let timeout
+    let timeout;
 
     const tick = () => {
-      const index = indexRef.current
-      const deleting = deletingRef.current
+      const index = indexRef.current;
+      const deleting = deletingRef.current;
 
       if (!deleting) {
-        setDisplayed(text.slice(0, index + 1))
-        indexRef.current++
+        setDisplayed(text.slice(0, index + 1));
+        indexRef.current++;
 
         if (indexRef.current === text.length) {
           timeout = setTimeout(() => {
-            deletingRef.current = true
-            tick()
-          }, pauseAfterTyping)
+            deletingRef.current = true;
+            tick();
+          }, pauseAfterTyping);
 
-          return
+          return;
         }
       } else {
-        setDisplayed(text.slice(0, index - 1))
-        indexRef.current--
+        setDisplayed(text.slice(0, index - 1));
+        indexRef.current--;
 
         if (indexRef.current === 0) {
-          deletingRef.current = false
-          timeout = setTimeout(tick, pauseAfterDeleting)
+          deletingRef.current = false;
+          timeout = setTimeout(tick, pauseAfterDeleting);
 
-          return
+          return;
         }
       }
 
@@ -48,14 +48,14 @@ function useTypewriter(text, options = {}) {
         ? deletingSpeed
         : randomTyping
           ? Math.random() * 40 + typingSpeed
-          : typingSpeed
+          : typingSpeed;
 
-      timeout = setTimeout(tick, delay)
-    }
+      timeout = setTimeout(tick, delay);
+    };
 
-    tick()
+    tick();
 
-    return () => clearTimeout(timeout)
+    return () => clearTimeout(timeout);
   }, [
     text,
     typingSpeed,
@@ -63,9 +63,9 @@ function useTypewriter(text, options = {}) {
     pauseAfterTyping,
     pauseAfterDeleting,
     randomTyping,
-  ])
+  ]);
 
-  return displayed
+  return displayed;
 }
 
-export { useTypewriter }
+export { useTypewriter };

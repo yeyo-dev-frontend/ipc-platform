@@ -4,7 +4,14 @@ import {
   getUpcomingEvents,
   isPastEvent,
 } from "@/data/events/evenst";
-import { addDays, addMonths, buildMonthGrid, buildWeek, todayKey, toDayKey } from "../../../utils/calendarDates";
+import {
+  addDays,
+  addMonths,
+  buildMonthGrid,
+  buildWeek,
+  todayKey,
+  toDayKey,
+} from "../../../utils/calendarDates";
 
 /**
  * Agrupa los eventos por día. Un evento de varios días aparece en cada uno.
@@ -89,7 +96,7 @@ function useEventsCalendar(events, initialEventId) {
 
   // En vista "día" se muestra el día del cursor; en las demás, el día seleccionado.
   const agendaKey = view === "day" ? cursor : selectedDay;
-  const agendaEntries = agendaKey ? eventsByDay[agendaKey] ?? [] : [];
+  const agendaEntries = agendaKey ? (eventsByDay[agendaKey] ?? []) : [];
 
   return {
     view,

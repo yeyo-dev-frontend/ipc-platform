@@ -189,7 +189,8 @@ const computerScienceContent = {
   journey: {
     title: "De una idea a una solución.",
     eyebrow: "Piensa · Construye · Mejora",
-    description: "Un ejemplo ilustrativo: crear un sistema de préstamos para una biblioteca. Así se conecta cada etapa del trabajo.",
+    description:
+      "Un ejemplo ilustrativo: crear un sistema de préstamos para una biblioteca. Así se conecta cada etapa del trabajo.",
   },
   benefits: {
     imageAlt: "Ilustración de un entorno de trabajo tecnológico",

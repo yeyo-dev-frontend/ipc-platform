@@ -1,13 +1,13 @@
 const apiFetch = async (route, method = "GET", body) => {
   try {
     const url = `http://localhost:3000${route}`;
-    
+
     const options = {
       method: method,
       headers: {
         "Content-Type": "application/json",
       },
-      credentials: "include"
+      credentials: "include",
     };
 
     if (body) {
@@ -34,11 +34,10 @@ const apiFetch = async (route, method = "GET", body) => {
       console.warn("El servidor respondió OK pero no es JSON válido:", text, e);
       return null;
     }
-
   } catch (error) {
     console.error(" Error de conexión (Backend apagado):", error);
     return null;
   }
-}
+};
 
 export { apiFetch };
