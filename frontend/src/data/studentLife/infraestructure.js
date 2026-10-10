@@ -1,3 +1,10 @@
+import infraestrusture from "@assets/images/studentLife/fachada.webp"
+import classroom from "@assets/images/studentLife/aulas.webp"
+import computerlab from "@assets/images/studentLife/laboratorio.webp"
+import yard from "@assets/images/studentLife/patio.webp"
+import library from "@assets/images/studentLife/biblioteca.webp"
+import studyArea from "@assets/images/studentLife/area-estudio.webp"
+import commonArea from "@assets/images/studentLife/area-convivencia.webp"
 
 export const infrastructureSpaces = [
   {
@@ -6,7 +13,7 @@ export const infrastructureSpaces = [
     title: "Frente del instituto",
     description:
       "La entrada que recibe cada día a nuestra comunidad estudiantil.",
-    image: null, // facadeImg
+    image: infraestrusture, 
     alt: "Frente del Instituto Privado Celendín",
   },
   {
@@ -15,7 +22,7 @@ export const infrastructureSpaces = [
     title: "Aulas",
     description:
       "Ambientes pensados para el desarrollo de las clases y el trabajo en equipo.",
-    image: null, // classroomsImg
+    image: classroom, 
     alt: "Aula del Instituto Privado Celendín",
   },
   {
@@ -24,7 +31,7 @@ export const infrastructureSpaces = [
     title: "Laboratorio de cómputo",
     description:
       "Espacio para las clases prácticas y el uso de herramientas tecnológicas.",
-    image: null, // computerLabImg
+    image: computerlab, 
     alt: "Laboratorio de cómputo del Instituto Privado Celendín",
   },
   {
@@ -33,7 +40,7 @@ export const infrastructureSpaces = [
     title: "Patio principal",
     description:
       "Un lugar para compartir, descansar y realizar actividades de integración.",
-    image: null, // courtyardImg
+    image: yard, 
     alt: "Patio principal del Instituto Privado Celendín",
   },
   {
@@ -42,7 +49,7 @@ export const infrastructureSpaces = [
     title: "Biblioteca",
     description:
       "Un ambiente tranquilo para consultar material y reforzar lo aprendido.",
-    image: null, // libraryImg
+    image: library, 
     alt: "Biblioteca del Instituto Privado Celendín",
   },
   {
@@ -51,7 +58,7 @@ export const infrastructureSpaces = [
     title: "Áreas de estudio",
     description:
       "Rincones para estudiar, hacer trabajos y reunirse con compañeros.",
-    image: null, // studyAreaImg
+    image: studyArea,
     alt: "Área de estudio del Instituto Privado Celendín",
   },
   {
@@ -60,7 +67,7 @@ export const infrastructureSpaces = [
     title: "Zonas de convivencia",
     description:
       "Espacios abiertos que facilitan el encuentro entre estudiantes.",
-    image: null, // commonAreaImg
+    image: commonArea, 
     alt: "Zona de convivencia del Instituto Privado Celendín",
   },
 ]
