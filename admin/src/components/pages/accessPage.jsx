@@ -3,7 +3,7 @@ import campus from "@ipc/campus";
 import { Brand } from "../molecules/brand";
 import { AccessForm } from "../organisms/accessForm";
 
-export function AccessPage({ step, onChange }) {
+export function AccessPage({ onAuthenticated, initialNotice }) {
   return (
     <main className="access">
       <section className="cover">
@@ -22,7 +22,10 @@ export function AccessPage({ step, onChange }) {
         </div>
       </section>
       <section className="access-side">
-        <AccessForm step={step} onChange={onChange} />
+        <AccessForm
+          onAuthenticated={onAuthenticated}
+          initialNotice={initialNotice}
+        />
       </section>
     </main>
   );

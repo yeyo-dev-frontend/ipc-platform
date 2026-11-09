@@ -39,7 +39,9 @@ La migración add_mfa añade campos/tablas y revoca sesiones anteriores; no borr
 
 Implementado: enrolamiento obligatorio, TOTP, anti-replay, desafío temporal, recuperación de acceso por códigos y compatibilidad con JWT/refresh rotativo. Pendientes: reemplazar autenticador, regenerar códigos con reautenticación reciente, recuperación asistida con identidad verificada y procedimiento institucional por pérdida de todos los factores. No existe un bypass ni desactivación pública de MFA.
 
-El panel visual, QR local y custodia guiada de recoveryCodes se implementarán después. Producción continúa bloqueada hasta revisar HTTPS/cookies, infraestructura y recuperación operativa; MFA implementado no implica despliegue listo. La limpieza periódica de desafíos/filas vencidas sigue pendiente.
+Desde el 8 de noviembre, el panel envía el código como texto a `POST /api/v1/auth/mfa/verify`. En el enrolamiento muestra la clave manual y, tras el 200, los diez códigos de recuperación hasta que el usuario confirme que los guardó. Una cuenta ya configurada puede elegir entre TOTP y un código de recuperación. Ante un 401 puede corregir el código mientras el desafío siga vigente. Al vencer el desafío o recibir un 429 vuelve al acceso con el mensaje correspondiente.
+
+El desafío, el JWT, el token CSRF y los códigos de recuperación se mantienen solo en memoria. La API entrega el refresh en una cookie HttpOnly. Una recarga pierde el estado del panel, incluidos los códigos aún visibles. Quedan pendientes la restauración y renovación de sesión, el cierre de sesión y el QR local. Producción requiere revisar HTTPS/cookies, infraestructura y recuperación operativa. También falta la limpieza periódica de desafíos y filas vencidas.
 
 ## Verificación
 

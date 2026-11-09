@@ -19,7 +19,7 @@ src/config/env.js carga backend/.env con la API nativa de Node y valida mediante
 | DATABASE_URL | URL PostgreSQL, obligatoria, secreta | Conexión del servidor y Prisma |
 | SHADOW_DATABASE_URL | URL PostgreSQL, necesaria para migrate dev, secreta | Base auxiliar de migraciones; nunca la principal |
 | NODE_ENV | development por defecto; test permitido | production bloqueado hasta completar MFA |
-| ADMIN_ORIGIN | Origen HTTP(S), por defecto http://127.0.0.1:3000 | Validación exacta de Origin; sin ruta ni barra final |
+| ADMIN_ORIGIN | Origen HTTP(S), por defecto http://localhost:5174 | Validación exacta de Origin; sin ruta ni barra final |
 | PORT | Entero 1–65535, por defecto 3000 | Puerto de Hono en 127.0.0.1 |
 | TEST_DATABASE_URL | URL interna del ejecutor de pruebas, secreta | Exclusivamente ipc_backend_auth_test; no configurar para el servidor |
 

@@ -15,7 +15,7 @@ export function loadConfig() {
       JWT_SECRET: z.string().regex(/^[a-f0-9]{64}$/i),
       MFA_ENCRYPTION_KEY: z.string().regex(/^[a-f0-9]{64}$/i),
       PORT: z.coerce.number().int().min(1).max(65535).default(3000),
-      ADMIN_ORIGIN: z.string().url().default("http://127.0.0.1:3000"),
+      ADMIN_ORIGIN: z.string().url().default("http://localhost:5174"),
     })
     .safeParse(process.env);
   if (!result.success)

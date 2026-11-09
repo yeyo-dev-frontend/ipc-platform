@@ -1,10 +1,14 @@
 # Backend y administración: punto de entrada
 
-Actualizado: 4 de noviembre de 2026, America/Lima.
+Actualizado: 8 de noviembre de 2026, America/Lima.
 
 ## Panel visual
 
-Aplicación React/Vite en admin/, disponible con pnpm dev:admin en http://localhost:5174/admin/. Maqueta navegable de acceso, verificación, recuperación y escritorio. Usa atoms para controles, molecules para campos y marca, organisms para el formulario y pages para composición. Imagen y recursos institucionales mediante alias explícitos de Vite. Estado efímero de demostración. Pendiente conectar login, MFA y sesiones al backend.
+El panel React/Vite en `admin/` envía correo y contraseña a la API. Un 202 abre la configuración manual del autenticador o la pantalla de código según `enrollmentRequired`. La verificación acepta TOTP y, para cuentas ya configuradas, un código de recuperación. El escritorio muestra el nombre y el rol devueltos por la API después del 200. En el primer acceso, el usuario debe confirmar que guardó sus diez códigos antes de entrar.
+
+Para probarlo localmente, usar `pnpm dev` y abrir http://localhost:5174/admin/. Vite reenvía las solicitudes de autenticación a 127.0.0.1:3000 conservando el origen. Si el archivo local `backend/.env` define el origen anterior, cambiarlo a `ADMIN_ORIGIN=http://localhost:5174` y reiniciar la API. `pnpm dev:admin` inicia solo el panel; el login necesita también la API y su PostgreSQL configurado.
+
+Se verificó la compilación con `pnpm build:admin`. En Edge se probó la distribución compilada con Hono y PostgreSQL local en `ipc_backend_auth_test`, usando cuentas temporales. Se cubrieron el código incorrecto seguido de un reintento válido, el enrolamiento, la confirmación de los diez códigos, el escritorio con el rol de la cuenta, el acceso posterior por TOTP y la recuperación con rechazo de un código ya usado. También se comprobó el retorno al acceso ante un 429 real y al adelantar el reloj del navegador hasta el vencimiento del desafío.
 
 ## Estado real
 
@@ -26,7 +30,7 @@ Confirmado: IPC exclusivo; tres roles admin/admissions/events; correo/contraseñ
 
 Confirmado: JS moderno con async/await, sin TS/JSDoc. Código inglés, textos/docs español, docs separados. ES6 no significa ES2015 estricto.
 
-Base recomendada: Hono/Node + PostgreSQL/Prisma + Zod, monolito modular; admin/ como app en /admin y API /api/v1; JWT con refresh rotativo y familias revocables, TOTP pendiente y SSE previsto. Prisma/Zod aprovechan referencia docente login revisada. Hosting pendiente, sin obligación Cloudflare.
+Base actual: Hono/Node + PostgreSQL/Prisma + Zod, monolito modular; admin/ como app en /admin y API /api/v1; JWT con refresh rotativo y familias revocables, TOTP implementado y SSE previsto. Hosting pendiente, sin obligación Cloudflare.
 
 Objetivo: semana del 20 de diciembre de 2026 (aproximada), tres integrantes, etapas. API/Bruno antes de UI.
 
@@ -43,7 +47,7 @@ Estas decisiones superan las referencias históricas Express/ES6 estricto para b
 
 ## Siguiente tarea
 
-Probar en Bruno login → enrolamiento/verificación MFA → guardar recoveryCodes → me → refresh → logout. Después construir el panel visual por etapas sobre estos contratos. Reemplazo de autenticador y regeneración de códigos siguen pendientes.
+Conectar la restauración y renovación de la sesión con refresh rotativo y el cierre de sesión con CSRF. Por ahora, una recarga o el vencimiento del JWT en el escritorio vuelve al formulario. La API controla las operaciones autorizadas.
 
 ## Pendientes
 

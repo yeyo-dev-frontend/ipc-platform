@@ -1,108 +1,64 @@
-import { useEffect, useRef, useState } from "react";
-import { FiArrowRight, FiLock, FiSmartphone } from "react-icons/fi";
-import { Button } from "../atoms/button";
-import { Field } from "../molecules/field";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { FiLock, FiSmartphone } from "react-icons/fi";
+import { LoginForm } from "./loginForm";
+import { MfaForm } from "./mfaForm";
+import { RecoveryCodes } from "./recoveryCodes";
 
-const screens = {
-  login: [
-    "Iniciar sesión",
-    "Accede al panel con tu cuenta institucional.",
-    "Continuar",
-    "verify",
-  ],
-  verify: [
-    "Verificar identidad",
-    "Usa el código de seis dígitos de tu aplicación autenticadora.",
-    "Verificar código",
-    "workspace",
-  ],
-  recovery: [
-    "Usar código de recuperación",
-    "Accede con uno de tus códigos de respaldo.",
-    "Verificar código",
-    "workspace",
-  ],
-};
-export function AccessForm({ step, onChange }) {
-  const [title, description, action, next] = screens[step];
-  const [code, setCode] = useState("");
+export function AccessForm({ onAuthenticated, initialNotice }) {
+  const [challenge, setChallenge] = useState(null);
+  const [verified, setVerified] = useState(null);
+  const [notice, setNotice] = useState(initialNotice);
   const heading = useRef(null);
+  const back = useCallback((message) => {
+    setChallenge(null);
+    setNotice(message);
+  }, []);
+  function accept(result) {
+    setChallenge(null);
+    if (result.recoveryCodes) setVerified(result);
+    else onAuthenticated(result.session);
+  }
+
+  let title = "Iniciar sesión";
+  if (challenge)
+    title = challenge.enrollmentRequired
+      ? "Configurar el autenticador"
+      : "Verificar identidad";
+  if (verified) title = "Guarda tus códigos de recuperación";
   useEffect(() => {
-    setCode("");
     heading.current?.focus();
-  }, [step]);
+  }, [title]);
+
   return (
     <section className="form-card">
       <div className="step-icon">
-        {step === "login" ? <FiLock /> : <FiSmartphone />}
+        {challenge || verified ? <FiSmartphone /> : <FiLock />}
       </div>
       <h2 tabIndex={-1} ref={heading}>
         {title}
       </h2>
-      <p>{description}</p>
-      <form
-        key={step}
-        onSubmit={(e) => {
-          e.preventDefault();
-          onChange(next);
-        }}
-      >
-        {step === "login" ? (
-          <>
-            <Field
-              label="Correo institucional"
-              type="email"
-              value="admin@example.test"
-              readOnly
-            />
-            <Field
-              label="Contraseña"
-              type="password"
-              value="demostracion"
-              readOnly
-            />
-          </>
-        ) : (
-          <Field
-            label={
-              step === "verify"
-                ? "Código de verificación"
-                : "Código de respaldo"
-            }
-            value={code}
-            onChange={(e) => setCode(e.target.value)}
-            required
-            autoComplete="off"
-            inputMode={step === "verify" ? "numeric" : "text"}
-            pattern={step === "verify" ? "123456" : "DEMO-IPC"}
-            placeholder={step === "verify" ? "123456" : "DEMO-IPC"}
+      {verified ? (
+        <RecoveryCodes
+          codes={verified.recoveryCodes}
+          onSaved={() => onAuthenticated(verified.session)}
+        />
+      ) : challenge ? (
+        <MfaForm challenge={challenge} onBack={back} onVerified={accept} />
+      ) : (
+        <>
+          <p>Accede al panel con tu cuenta institucional.</p>
+          {notice && <p role="status">{notice}</p>}
+          <LoginForm
+            onChallenge={(data) => {
+              setNotice("");
+              setChallenge({
+                ...data,
+                deadline: Date.now() + data.expiresIn * 1000,
+              });
+            }}
           />
-        )}
-        <Button type="submit">
-          {action}
-          <FiArrowRight />
-        </Button>
-      </form>
-      {step !== "login" && (
-        <div className="actions">
-          <Button
-            variant="link"
-            onClick={() => onChange(step === "verify" ? "recovery" : "verify")}
-          >
-            {step === "verify"
-              ? "Usar código de recuperación"
-              : "Usar la aplicación autenticadora"}
-          </Button>
-          <Button variant="link" onClick={() => onChange("login")}>
-            Volver al acceso
-          </Button>
-        </div>
+        </>
       )}
-      <small className="demo">
-        {step === "login"
-          ? "Vista de muestra con credenciales ficticias."
-          : `Para esta muestra, escribe ${step === "verify" ? "123456" : "DEMO-IPC"}.`}
-      </small>
     </section>
   );
 }
