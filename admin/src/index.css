@@ -28,14 +28,16 @@ body {
   margin: 0;
 }
 button,
-input {
+input,
+select {
   font: inherit;
 }
 button {
   cursor: pointer;
 }
 button:focus-visible,
-input:focus-visible {
+input:focus-visible,
+select:focus-visible {
   outline: 3px solid #4a79c9;
   outline-offset: 3px;
 }
@@ -180,6 +182,23 @@ form {
 .form-card code {
   overflow-wrap: anywhere;
 }
+.authenticator-qr {
+  display: block;
+  width: min(100%, 240px);
+  aspect-ratio: 1;
+  margin: 16px 0;
+  background: var(--blue);
+}
+.authenticator-qr img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  image-rendering: pixelated;
+}
+.form-card summary {
+  color: var(--blue);
+  cursor: pointer;
+}
 .recovery-codes {
   display: grid;
   gap: 4px;
@@ -267,19 +286,38 @@ form {
   grid-template-columns: repeat(3, 1fr);
   gap: 16px;
 }
-.areas article {
+.invitations {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+.areas article,
+.invitations article,
+.invitation-result {
   padding: 24px;
   background: white;
   border: 1px solid var(--line);
   border-radius: 10px;
 }
+.invitation-result {
+  margin-bottom: 16px;
+}
+.invitation-result code {
+  overflow-wrap: anywhere;
+}
 .areas svg {
   color: var(--blue);
   font-size: 24px;
 }
-.areas h3 {
+.areas h3,
+.invitations h3,
+.invitation-result h3 {
   font-size: 24px;
   margin: 16px 0 4px;
+}
+.invitations h3,
+.invitation-result h3 {
+  margin-top: 0;
 }
 @media (max-width: 760px) {
   .access {
@@ -307,7 +345,8 @@ form {
   .access-side {
     padding: 32px 24px;
   }
-  .areas {
+  .areas,
+  .invitations {
     grid-template-columns: 1fr;
   }
   .workspace header {

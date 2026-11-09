@@ -1,23 +1,53 @@
 const unavailable =
   "No se pudo contactar con el servicio de acceso. Inténtalo de nuevo.";
 
-export async function postAuth(path, input, status) {
+async function sendAuth(path, options, status) {
   let response;
   try {
     response = await fetch("/api/v1/auth/" + path, {
-      method: "POST",
-      headers: { "Content-Type": "application/json", "X-IPC-Client": "admin" },
+      ...options,
       credentials: "same-origin",
-      body: JSON.stringify(input),
     });
   } catch {
     throw new Error(unavailable);
   }
-  const body = await response.json().catch(() => null);
+  const body =
+    status === 204 && response.status === 204
+      ? null
+      : await response.json().catch(() => null);
   if (response.status !== status) {
-    const error = new Error(body?.error?.message || unavailable);
+    const fieldMessage =
+      body?.error?.fields &&
+      Object.values(body.error.fields).flat().find(Boolean);
+    const error = new Error(
+      fieldMessage || body?.error?.message || unavailable,
+    );
     error.status = response.status;
+    error.code = body?.error?.code;
+    error.fields = body?.error?.fields;
     throw error;
   }
   return body?.data;
+}
+
+export function getAuth(path, status) {
+  return sendAuth(
+    path,
+    { method: "GET", headers: { "X-IPC-Client": "admin" } },
+    status,
+  );
+}
+
+export function postAuth(path, input, status, csrfToken, accessToken) {
+  const headers = {
+    "Content-Type": "application/json",
+    "X-IPC-Client": "admin",
+  };
+  if (csrfToken) headers["X-CSRF-Token"] = csrfToken;
+  if (accessToken) headers.Authorization = "Bearer " + accessToken;
+  return sendAuth(
+    path,
+    { method: "POST", headers, body: JSON.stringify(input) },
+    status,
+  );
 }

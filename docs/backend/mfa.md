@@ -5,7 +5,7 @@ Esta guía sustituye el login directo descrito antes en authentication.md. MFA o
 ## Flujo en Bruno
 
 1. Ejecutar login con correo y contraseña. Responde **202**, sin JWT ni refresh; guarda challengeToken en memoria.
-2. Si enrollmentRequired es true, agregar manualmente secret a una aplicación autenticadora TOTP (6 dígitos, SHA1, 30 segundos, emisor IPC). provisioningUri permitirá generar un QR local en el futuro panel; no usar servicios externos de QR.
+2. Si enrollmentRequired es true, agregar manualmente secret a una aplicación autenticadora TOTP (6 dígitos, SHA1, 30 segundos, emisor IPC). En el panel, escanear con Authy u otra aplicación TOTP el QR que el navegador genera a partir de provisioningUri. «Introducir la clave manualmente» permite configurar la cuenta desde el mismo teléfono. El QR solo aparece durante el enrolamiento.
 3. Definir mfaCode en el entorno local privado de Bruno con el código actual. Ejecutar 09-mfa-verify antes de cinco minutos.
 4. La respuesta 200 entrega accessToken, tokenType, expiresIn, csrfToken y cookie refresh HttpOnly. En el primer enrolamiento también entrega diez recoveryCodes, una sola vez. Guardarlos privadamente antes de cerrar la respuesta.
 5. Continuar con me, refresh y logout existentes. En próximos logins se repiten contraseña y código, sin entregar nuevamente el secreto.
@@ -41,7 +41,7 @@ Implementado: enrolamiento obligatorio, TOTP, anti-replay, desafío temporal, re
 
 Desde el 8 de noviembre, el panel envía el código como texto a `POST /api/v1/auth/mfa/verify`. En el enrolamiento muestra la clave manual y, tras el 200, los diez códigos de recuperación hasta que el usuario confirme que los guardó. Una cuenta ya configurada puede elegir entre TOTP y un código de recuperación. Ante un 401 puede corregir el código mientras el desafío siga vigente. Al vencer el desafío o recibir un 429 vuelve al acceso con el mensaje correspondiente.
 
-El desafío, el JWT, el token CSRF y los códigos de recuperación se mantienen solo en memoria. La API entrega el refresh en una cookie HttpOnly. Una recarga pierde el estado del panel, incluidos los códigos aún visibles. Quedan pendientes la restauración y renovación de sesión, el cierre de sesión y el QR local. Producción requiere revisar HTTPS/cookies, infraestructura y recuperación operativa. También falta la limpieza periódica de desafíos y filas vencidas.
+El desafío, el JWT, el token CSRF y los códigos de recuperación se mantienen solo en memoria. La API entrega el refresh en una cookie HttpOnly. Una recarga pierde el estado del panel, incluidos los códigos aún visibles. Quedan pendientes la restauración y renovación de sesión y el cierre de sesión. Producción requiere revisar HTTPS/cookies, infraestructura y recuperación operativa. También falta la limpieza periódica de desafíos y filas vencidas.
 
 ## Verificación
 

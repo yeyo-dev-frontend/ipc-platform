@@ -1,4 +1,5 @@
 import { postAuth } from "./authRequest";
+import { parseSession } from "./session";
 
 export async function verifyMfa(challenge, code) {
   const data = await postAuth(
@@ -6,22 +7,8 @@ export async function verifyMfa(challenge, code) {
     { challengeToken: challenge.challengeToken, code },
     200,
   );
-  const { accessToken, tokenType, csrfToken, expiresIn, admin, recoveryCodes } =
-    data ?? {};
-  if (
-    typeof accessToken !== "string" ||
-    !accessToken ||
-    tokenType !== "Bearer" ||
-    typeof csrfToken !== "string" ||
-    !csrfToken ||
-    !Number.isInteger(expiresIn) ||
-    expiresIn <= 0 ||
-    !admin?.id ||
-    !admin.name ||
-    !["admin", "admissions", "events"].includes(admin.role)
-  ) {
-    throw new Error("No se pudo confirmar la sesión. Vuelve al acceso.");
-  }
+  const session = parseSession(data);
+  const { recoveryCodes } = data ?? {};
   if (
     challenge.enrollmentRequired &&
     (!Array.isArray(recoveryCodes) ||
@@ -36,12 +23,7 @@ export async function verifyMfa(challenge, code) {
     );
   }
   return {
-    session: {
-      admin,
-      accessToken,
-      csrfToken,
-      expiresAt: Date.now() + expiresIn * 1000,
-    },
+    session,
     recoveryCodes: challenge.enrollmentRequired ? recoveryCodes : null,
   };
 }

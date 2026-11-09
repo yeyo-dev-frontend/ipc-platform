@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Button } from "../atoms/button";
 import { Field } from "../molecules/field";
+import { AuthenticatorSetup } from "../molecules/authenticatorSetup";
 import { verifyMfa } from "../../services/verifyMfa";
 
 const expired = "El desafío ha vencido. Vuelve a iniciar sesión.";
@@ -39,16 +40,11 @@ export function MfaForm({ challenge, onBack, onVerified }) {
   return (
     <>
       {challenge.enrollmentRequired && (
-        <>
-          <p>
-            Agrega una cuenta TOTP en tu aplicación autenticadora con esta
-            clave.
-          </p>
-          <p>
-            <strong>Clave de configuración:</strong>{" "}
-            <code>{challenge.secret}</code>
-          </p>
-        </>
+        <AuthenticatorSetup
+          key={challenge.challengeToken}
+          provisioningUri={challenge.provisioningUri}
+          secret={challenge.secret}
+        />
       )}
       <form onSubmit={submit} aria-busy={busy}>
         <Field

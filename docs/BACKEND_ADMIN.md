@@ -4,11 +4,17 @@ Actualizado: 8 de noviembre de 2026, America/Lima.
 
 ## Panel visual
 
-El panel React/Vite en `admin/` envía correo y contraseña a la API. Un 202 abre la configuración manual del autenticador o la pantalla de código según `enrollmentRequired`. La verificación acepta TOTP y, para cuentas ya configuradas, un código de recuperación. El escritorio muestra el nombre y el rol devueltos por la API después del 200. En el primer acceso, el usuario debe confirmar que guardó sus diez códigos antes de entrar.
+El panel React/Vite en `admin/` permite activar cuentas pendientes desde la pantalla de acceso mediante «Activar cuenta con código» (`POST /api/v1/auth/activate`, con código de un solo uso y contraseña de 15 a 128 caracteres confirmada antes de enviar) y envía correo y contraseña a la API para iniciar sesión. Un 202 abre la configuración del autenticador mediante QR o clave manual o la pantalla de código según `enrollmentRequired`. La verificación acepta TOTP y, para cuentas ya configuradas, un código de recuperación. El escritorio muestra el nombre y el rol devueltos por la API después del 200. En el primer acceso, el usuario debe confirmar que guardó sus diez códigos antes de entrar.
 
 Para probarlo localmente, usar `pnpm dev` y abrir http://localhost:5174/admin/. Vite reenvía las solicitudes de autenticación a 127.0.0.1:3000 conservando el origen. Si el archivo local `backend/.env` define el origen anterior, cambiarlo a `ADMIN_ORIGIN=http://localhost:5174` y reiniciar la API. `pnpm dev:admin` inicia solo el panel; el login necesita también la API y su PostgreSQL configurado.
 
 Se verificó la compilación con `pnpm build:admin`. En Edge se probó la distribución compilada con Hono y PostgreSQL local en `ipc_backend_auth_test`, usando cuentas temporales. Se cubrieron el código incorrecto seguido de un reintento válido, el enrolamiento, la confirmación de los diez códigos, el escritorio con el rol de la cuenta, el acceso posterior por TOTP y la recuperación con rechazo de un código ya usado. También se comprobó el retorno al acceso ante un 429 real y al adelantar el reloj del navegador hasta el vencimiento del desafío.
+
+En la prueba del QR, un lector independiente decodificó una captura del panel en Edge. El secreto leído coincidió con la clave manual y el código TOTP generado a partir del QR completó el enrolamiento contra Hono y PostgreSQL. La prueba posterior con la misma cuenta confirmó que el QR solo aparece en el primer acceso. Queda por probar el escaneo físico con Authy en un teléfono.
+
+La sesión del panel se modularizó en `admin/src/services/session/` en archivos pequeños por responsabilidad: recupera la sesión al recargar con `GET /api/v1/auth/csrf` y `POST /api/v1/auth/refresh`, mantiene el JWT en memoria y el refresh en su cookie HttpOnly, y conecta el botón «Cerrar sesión» del encabezado a `POST /api/v1/auth/logout`. Las renovaciones y el cierre se coordinan entre pestañas con Web Locks (`navigator.locks`) y `BroadcastChannel` para evitar reutilizar un refresh consumido. El JWT solo se renueva cuando hay actividad del usuario dentro de la ventana vigente o al retomar el trabajo antes de los 30 minutos de inactividad, de modo que una pestaña olvidada no mantiene viva la sesión en segundo plano; al vencer realmente la sesión, el panel vuelve al acceso mostrando el aviso de vencimiento.
+
+El escritorio filtra las áreas de trabajo según el rol devuelto por la API (`admin` ve Cuentas y accesos, Eventos, Admisión, Contenido y Auditoría; `admissions` ve Admisión; `events` ve Eventos). Para el rol `admin`, incluye la sección «Cuentas e invitaciones» conectada a `POST /api/v1/auth/register` (ofreciendo únicamente los roles Admisión y Eventos en el formulario) y `POST /api/v1/auth/activation/reissue` con Bearer + CSRF, mostrando el código de activación de un solo uso únicamente en memoria con opción de ocultarlo y volver a mostrarlo. Se verificó en Edge contra Hono y `ipc_backend_auth_test` el ciclo completo: activación por código en el navegador, enrolamiento MFA, recarga sin repetir MFA, continuidad tras vencer el JWT, dos pestañas simultáneas sin revocación, invitación y reemisión de cuentas de Admisión y Eventos desde el panel `admin`, alternancia de visibilidad del código emitido, activación e ingreso de ambas cuentas invitadas con sus áreas por rol, cierre de sesión y aviso de sesión vencida.
 
 ## Estado real
 
@@ -47,7 +53,7 @@ Estas decisiones superan las referencias históricas Express/ES6 estricto para b
 
 ## Siguiente tarea
 
-Conectar la restauración y renovación de la sesión con refresh rotativo y el cierre de sesión con CSRF. Por ahora, una recarga o el vencimiento del JWT en el escritorio vuelve al formulario. La API controla las operaciones autorizadas.
+Implementar en el backend y en Bruno los endpoints de gestión de cuentas administrativas pendientes (listado, baja/desactivación con protección del último `admin` activo y recuperación asistida) o el primer módulo de negocio (medios y eventos), antes de conectar sus vistas en el panel. La API sigue siendo la autoridad para las operaciones protegidas.
 
 ## Pendientes
 
