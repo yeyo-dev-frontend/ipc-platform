@@ -1,3 +1,4 @@
+import { finishTestLogin } from "./mfaLogin.js";
 import assert from "node:assert/strict";
 import { randomBytes, randomUUID, createSecretKey } from "node:crypto";
 import { SignJWT, decodeJwt } from "jose";
@@ -19,6 +20,7 @@ export async function createJwtContext() {
     origin: "http://localhost:3000",
     production: false,
     jwtSecret: randomBytes(32).toString("hex"),
+    mfaEncryptionKey: randomBytes(32).toString("hex"),
   };
   const app = await createApp({ db, config, clientIp: () => "jwt-tests" });
   await db.session.deleteMany();
@@ -57,8 +59,19 @@ export async function createJwtContext() {
     config,
     request,
     read,
+    async begin() {
+      return request("/login", { email: account.admin.email, password });
+    },
     async login() {
-      return read(await request("/login", { email: account.admin.email, password }));
+      return read(
+        await finishTestLogin(
+          await request("/login", { email: account.admin.email, password }),
+          request,
+          db,
+          config,
+          account.admin.email,
+        ),
+      );
     },
     async fresh() {
       await db.session.deleteMany();

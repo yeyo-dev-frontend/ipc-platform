@@ -7,7 +7,8 @@ Actualizado: 29 de octubre de 2026. Ejecutar desde la raíz de ipc-platform, usa
 | Comando | Qué hace |
 | --- | --- |
 | pnpm install --ignore-scripts | Instala las dependencias del lockfile sin ejecutar scripts automáticos; Prisma se genera explícitamente después |
-| pnpm dev | Inicia frontend y backend; Ctrl+C detiene ambos |
+| pnpm dev:admin (también pnpm dev: admin) | Inicia solo el panel en http://localhost:5174/admin/ |
+| pnpm dev | Inicia web pública, panel y backend; Ctrl+C detiene los tres |
 | pnpm dev:backend | Inicia backend con Nodemon |
 | pnpm dev:frontend | Inicia frontend con Vite |
 | pnpm --filter backend start | Inicia backend sin recarga automática |
@@ -119,3 +120,12 @@ Bruno y flujo completo: [authentication.md](backend/authentication.md). Los cód
 - `pnpm test:backend`: ahora ejecuta las suites de autenticación y JWT en serie, solo contra ipc_backend_auth_test.
 - La migración jwt_refresh_rotation conserva cuentas y revoca sesiones del formato anterior. Iniciar sesión nuevamente en Bruno.
 - La colección incorpora POST /refresh y GET /csrf. Guía vigente: [authentication.md](backend/authentication.md).
+
+
+## MFA — 4/11/2026
+
+- pnpm mfa:key: genera la clave independiente de cifrado MFA en backend/.env; no muestra ni sobrescribe una existente.
+- pnpm test:backend: incluye ahora la suite MFA en la base aislada.
+- Tras cambios de esquema: pnpm db:migrate y pnpm db:generate; no resetear cuentas.
+
+Flujo de Bruno y limitaciones: [MFA](backend/mfa.md).

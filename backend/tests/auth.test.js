@@ -1,3 +1,4 @@
+import { finishTestLogin } from "./helpers/mfaLogin.js";
 import { randomBytes } from "node:crypto";
 import assert from "node:assert/strict";
 import { test } from "node:test";
@@ -26,6 +27,7 @@ test("Registro y autenticación con PostgreSQL real", async (t) => {
     origin: "http://localhost:3000",
     production: false,
     jwtSecret: randomBytes(32).toString("hex"),
+    mfaEncryptionKey: randomBytes(32).toString("hex"),
   };
   const service = await createAuthService(repository, config);
   const app = await createApp({
@@ -53,7 +55,13 @@ test("Registro y autenticación con PostgreSQL real", async (t) => {
         : { body: typeof body === "string" ? body : JSON.stringify(body) }),
     });
   const login = async (email, old) => {
-    const response = await request("/login", { email, password }, old);
+    const response = await finishTestLogin(
+      await request("/login", { email, password }, old),
+      request,
+      db,
+      config,
+      email,
+    );
     assert.equal(response.status, 200);
     const json = await response.json();
     const cookie = response.headers
@@ -248,7 +256,7 @@ test("Registro y autenticación con PostgreSQL real", async (t) => {
       }
       assert.equal((await request("/login", { email: root.admin.email, password })).status, 429);
       await db.authRateLimit.updateMany({ data: { expiresAt: new Date(0) } });
-      assert.equal((await request("/login", { email: root.admin.email, password })).status, 200);
+      assert.equal((await request("/login", { email: root.admin.email, password })).status, 202);
       await db.authRateLimit.update({
         where: { key: digest("ip:integration") },
         data: { hits: 30 },

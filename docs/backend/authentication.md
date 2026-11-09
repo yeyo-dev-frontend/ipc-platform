@@ -1,3 +1,5 @@
+> Actualización 4/11/2026: MFA obligatorio implementado. El contrato de login y los nuevos modelos/configuración se detallan en [mfa.md](mfa.md); prevalece sobre descripciones anteriores de login directo o MFA pendiente.
+
 # Registro y autenticación con JWT
 
 Actualizado: 30 de octubre de 2026. Por petición explícita del usuario para el curso, se sustituyó la cookie de sesión opaca por **access token JWT + refresh token rotativo en Prisma**. Esta decisión reemplaza la recomendación anterior de usar solo sesiones opacas. No es una implementación de OAuth: es autenticación de primera parte con login propio.

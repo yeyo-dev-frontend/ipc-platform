@@ -1,3 +1,5 @@
+> Actualización 4/11/2026: MFA obligatorio implementado. El contrato de login y los nuevos modelos/configuración se detallan en [mfa.md](mfa.md); prevalece sobre descripciones anteriores de login directo o MFA pendiente.
+
 # Estado actualizado: Prisma configurado
 
 ## JWT — 30 de octubre de 2026

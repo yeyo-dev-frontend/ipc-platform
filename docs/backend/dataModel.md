@@ -1,3 +1,5 @@
+> Actualización 4/11/2026: MFA obligatorio implementado. El contrato de login y los nuevos modelos/configuración se detallan en [mfa.md](mfa.md); prevalece sobre descripciones anteriores de login directo o MFA pendiente.
+
 # Datos de administradores y autenticación
 
 Actualizado: 30 de octubre de 2026. PostgreSQL local ipc_backend_dev; modelos Prisma en backend/prisma/schema.prisma. Las cuentas creadas por el usuario se conservan; las pruebas usan una base separada.

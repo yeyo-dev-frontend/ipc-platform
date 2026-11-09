@@ -1,8 +1,14 @@
 # Backend y administración: punto de entrada
 
-Actualizado: 30 de octubre de 2026, America/Celendin.
+Actualizado: 4 de noviembre de 2026, America/Lima.
+
+## Panel visual
+
+Aplicación React/Vite en admin/, disponible con pnpm dev:admin en http://localhost:5174/admin/. Maqueta navegable de acceso, verificación, recuperación y escritorio. Usa atoms para controles, molecules para campos y marca, organisms para el formulario y pages para composición. Imagen y recursos institucionales mediante alias explícitos de Vite. Estado efímero de demostración. Pendiente conectar login, MFA y sesiones al backend.
 
 ## Estado real
+
+MFA TOTP obligatorio implementado el 4 de noviembre. Login ahora devuelve 202 con desafío temporal; POST /mfa/verify entrega JWT/refresh tras segundo factor. Cifrado independiente, anti-replay y códigos de recuperación de un solo uso. Contrato vigente: [mfa.md](backend/mfa.md).
 
 Retirada la ruta POST / de demostración el 30 de octubre; responde 404. GET / se conserva como comprobación básica del servidor.
 
@@ -12,7 +18,7 @@ Migración jwt_refresh_rotation aplicada: añade refresh_tokens, retira tokenHas
 
 POST /refresh y GET /csrf añadidos; logout funciona con cookie + CSRF incluso sin JWT vigente. Bruno actualizado con variables de ejecución para JWT/CSRF y cookie jar para refresh. Los valores personales que estaban en peticiones compartidas se trasladaron a environments/local.bru, ignorado por Git.
 
-MFA sigue aplazado por decisión del usuario y producción bloqueada. Guía vigente y contratos: [authentication.md](backend/authentication.md). Esta elección de JWT reemplaza las recomendaciones anteriores de sesiones opacas sin refresh en referencias históricas de la skill.
+MFA implementado por petición del usuario; producción sigue bloqueada por revisión de despliegue y recuperación operativa. Guía vigente y contratos: [authentication.md](backend/authentication.md). Esta elección de JWT reemplaza las recomendaciones anteriores de sesiones opacas sin refresh en referencias históricas de la skill.
 
 ## Decisiones
 
@@ -37,7 +43,7 @@ Estas decisiones superan las referencias históricas Express/ES6 estricto para b
 
 ## Siguiente tarea
 
-Probar en Bruno login → me → refresh → me → logout. Revisar hashes y usedAt en Prisma sin exponer tokens reales. El futuro cliente coordinará una sola renovación entre pestañas; dos solicitudes con el mismo refresh revocan la familia. Después implementar MFA por etapas, sin ampliar otras funcionalidades automáticamente.
+Probar en Bruno login → enrolamiento/verificación MFA → guardar recoveryCodes → me → refresh → logout. Después construir el panel visual por etapas sobre estos contratos. Reemplazo de autenticador y regeneración de códigos siguen pendientes.
 
 ## Pendientes
 
@@ -116,3 +122,8 @@ Verificado: 40 pruebas reportadas aprobadas (incluidos contenedores), ESLint cor
 ## Retiro de demostración — 30 de octubre de 2026
 
 Eliminado el POST / que devolvía el JSON recibido y sus imports exclusivos de app.js. Actualizada su prueba para exigir 404 sin eco de datos. Se conservan GET /, autenticación, herramientas de desarrollo, pruebas y carpetas aprobadas para los futuros módulos. Las menciones anteriores al POST de clase son históricas.
+
+
+## MFA — 4 de noviembre de 2026
+
+Implementación y límites en [mfa.md](backend/mfa.md). 48 pruebas reportadas aprobadas y ESLint correcto. Nueva clave privada creada sin exponerla; migración añade MFA y revoca sesiones previas conservando cuentas. Bruno actualizado con variables, sin credenciales literales. Sin cambios al frontend ni publicación.

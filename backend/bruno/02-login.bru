@@ -17,14 +17,15 @@ headers {
 
 body:json {
   {
-    "email": "yeyo@gmail.com",
-    "password": "yerson123456789"
+    "email": "{{email}}",
+    "password": "{{password}}"
   }
 }
 
 script:post-response {
-  if (res.getStatus() === 200) {
-    bru.setVar("accessToken", res.getBody().data.accessToken);
-    bru.setVar("csrfToken", res.getBody().data.csrfToken);
+  if (res.getStatus() === 202) {
+    bru.setVar("accessToken", "");
+    bru.setVar("csrfToken", "");
+    bru.setVar("challengeToken", res.getBody().data.challengeToken);
   }
 }

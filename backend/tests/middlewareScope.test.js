@@ -8,6 +8,7 @@ const config = {
   origin: "http://localhost:3000",
   production: false,
   jwtSecret: randomBytes(32).toString("hex"),
+  mfaEncryptionKey: randomBytes(32).toString("hex"),
 };
 const app = await createApp({ db: {}, config, clientIp: () => "scope-test" });
 // Rutas sintéticas: comprueban aislamiento sin implementar módulos públicos ni subidas.

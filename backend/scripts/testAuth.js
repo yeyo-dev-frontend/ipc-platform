@@ -21,6 +21,7 @@ for (const args of [
     "--test-concurrency=1",
     "tests/auth.test.js",
     "tests/jwt.test.js",
+    "tests/mfa.test.js",
     "tests/middlewareScope.test.js",
     "tests/readInput.test.js",
   ],

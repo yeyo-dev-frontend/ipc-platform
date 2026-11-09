@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "concurrently --kill-others --names BACKEND,FRONTEND --prefix-colors cyan,magenta \"pnpm --filter backend run dev\" \"pnpm --filter frontend run dev\"",
+    "dev": "concurrently --kill-others --names BACKEND,FRONTEND,ADMIN --prefix-colors cyan,magenta,green \"pnpm --filter backend run dev\" \"pnpm --filter frontend run dev\" \"pnpm --filter admin run dev\"",
     "dev:backend": "pnpm --filter backend run dev",
     "dev:frontend": "pnpm --filter frontend run dev",
     "build:frontend": "pnpm --filter frontend run build",
@@ -24,7 +24,11 @@
     "admin:bootstrap": "pnpm --filter backend admin:bootstrap",
     "test:backend": "pnpm --filter backend test",
     "admin:activation": "pnpm --filter backend admin:activation",
-    "auth:key": "pnpm --filter backend auth:key"
+    "auth:key": "pnpm --filter backend auth:key",
+    "mfa:key": "pnpm --filter backend mfa:key",
+    "dev:admin": "pnpm --filter admin dev",
+    "build:admin": "pnpm --filter admin build",
+    "dev:": "node scripts/devTarget.js"
   },
   "repository": {
     "type": "git",

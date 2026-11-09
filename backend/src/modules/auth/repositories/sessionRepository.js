@@ -4,9 +4,10 @@ import { isSessionActive, unauthorized } from "../sessionPolicy.js";
 import { SESSION_IDLE_MS, SESSION_MAX_MS } from "../authSettings.js";
 
 export function createSessionRepository(db) {
+  const transact = (fn) => (db.$transaction ? db.$transaction(fn) : fn(db));
   return {
     async createSession(admin, tokenHash, oldHash, requestId) {
-      return db.$transaction(async (tx) => {
+      return transact(async (tx) => {
         const current = await tx.admin.findUnique({ where: { id: admin.id } });
         if (!current?.isActive || current.passwordHash !== admin.passwordHash) throw unauthorized();
         if (oldHash) {
