@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Title } from "../atoms/titles";
 import { InvitationResult } from "../molecules/invitationResult";
 import { RegisterAdminForm } from "./registerAdminForm";
 import { ReissueActivationForm } from "./reissueActivationForm";
@@ -8,14 +9,19 @@ export function AccountInvitations() {
 
   return (
     <section aria-labelledby="invitations-heading">
-      <h2 id="invitations-heading">Cuentas e invitaciones</h2>
+      <Title
+        level="h2"
+        id="invitations-heading"
+        text="Cuentas e invitaciones"
+        className="mt-10 mb-4"
+      />
       {invitation && (
         <InvitationResult
           key={invitation.activationToken}
           invitation={invitation}
         />
       )}
-      <div className="invitations">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
         <RegisterAdminForm onIssued={setInvitation} />
         <ReissueActivationForm onIssued={setInvitation} />
       </div>

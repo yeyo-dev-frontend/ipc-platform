@@ -2,6 +2,7 @@ import { useState } from "react";
 import { FiArrowRight } from "react-icons/fi";
 import { login } from "../../services/login";
 import { Button } from "../atoms/button";
+import { Paragraph } from "../atoms/paragraph";
 import { Field } from "../molecules/field";
 
 export function LoginForm({ onChallenge }) {
@@ -26,7 +27,7 @@ export function LoginForm({ onChallenge }) {
   }
 
   return (
-    <form onSubmit={submit} aria-busy={busy}>
+    <form onSubmit={submit} aria-busy={busy} className="mt-8 grid gap-4.5">
       <Field
         label="Correo institucional"
         name="email"
@@ -41,9 +42,13 @@ export function LoginForm({ onChallenge }) {
         autoComplete="current-password"
         required
       />
-      {error && <p role="alert">{error}</p>}
-      <Button type="submit" disabled={busy}>
-        {busy ? "Comprobando…" : "Continuar"} <FiArrowRight />
+      {error && <Paragraph role="alert" variant="danger" text={error} />}
+      <Button
+        type="submit"
+        disabled={busy}
+        text={busy ? "Comprobando…" : "Continuar"}
+      >
+        <FiArrowRight />
       </Button>
     </form>
   );

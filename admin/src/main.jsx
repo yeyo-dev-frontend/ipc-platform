@@ -1,7 +1,14 @@
 import { StrictMode, useEffect, useState } from "react";
 import { createRoot } from "react-dom/client";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import { RoleRoute } from "./components/organisms/roleRoute";
 import { AccessPage } from "./components/pages/accessPage";
-import { WorkspacePage } from "./components/pages/workspacePage";
+import { AreaPage } from "./components/pages/areaPage";
+import {
+  WorkspaceDashboard,
+  WorkspacePage,
+} from "./components/pages/workspacePage";
+import { WORKSPACE_AREAS } from "./data/workspaceAreas";
 import {
   acceptSession,
   logoutSession,
@@ -34,21 +41,58 @@ function AdminApp() {
   }, []);
 
   if (restoring) return null;
-  return session ? (
-    <WorkspacePage admin={session.admin} onLogout={() => logoutSession()} />
-  ) : (
-    <AccessPage
-      onAuthenticated={(nextSession) => {
-        setNotice("");
-        acceptSession(nextSession);
-      }}
-      initialNotice={notice}
-    />
+  if (!session) {
+    return (
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <AccessPage
+              onAuthenticated={(nextSession) => {
+                setNotice("");
+                acceptSession(nextSession);
+              }}
+              initialNotice={notice}
+            />
+          }
+        />
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    );
+  }
+
+  return (
+    <Routes>
+      <Route
+        element={
+          <WorkspacePage
+            admin={session.admin}
+            onLogout={() => logoutSession()}
+          />
+        }
+      >
+        <Route index element={<WorkspaceDashboard admin={session.admin} />} />
+        {WORKSPACE_AREAS.map((area) => (
+          <Route
+            key={area.slug}
+            path={area.path}
+            element={
+              <RoleRoute role={session.admin.role} allowed={area.roles}>
+                <AreaPage area={area} />
+              </RoleRoute>
+            }
+          />
+        ))}
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Route>
+    </Routes>
   );
 }
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <AdminApp />
+    <BrowserRouter basename="/admin">
+      <AdminApp />
+    </BrowserRouter>
   </StrictMode>,
 );

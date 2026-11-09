@@ -1,11 +1,12 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
+import tailwindcss from "@tailwindcss/vite";
 import { fileURLToPath } from "node:url";
 
 const resource = (path) => fileURLToPath(new URL(path, import.meta.url));
 export default defineConfig({
   base: "/admin/",
-  plugins: [react()],
+  plugins: [react(), tailwindcss()],
   server: {
     port: 5174,
     strictPort: true,

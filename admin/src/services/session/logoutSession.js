@@ -1,10 +1,12 @@
 import { postAuth } from "../authRequest";
+import { clearRecoveryPending } from "./recoveryPending";
 import { fetchCsrf } from "./requestRefresh";
 import { broadcastLogout } from "./sessionChannel";
 import { pauseForBroadcast, withSessionLock } from "./sessionLock";
 import { applySession, getSession } from "./sessionStore";
 
 export async function logoutSession(notice = "") {
+  clearRecoveryPending();
   const csrfToken = getSession()?.csrfToken;
   await withSessionLock(async () => {
     try {

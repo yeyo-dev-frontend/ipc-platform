@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Button } from "../atoms/button";
+import { Paragraph } from "../atoms/paragraph";
 import { Field } from "../molecules/field";
 import { AuthenticatorSetup } from "../molecules/authenticatorSetup";
 import { verifyMfa } from "../../services/verifyMfa";
@@ -46,7 +47,7 @@ export function MfaForm({ challenge, onBack, onVerified }) {
           secret={challenge.secret}
         />
       )}
-      <form onSubmit={submit} aria-busy={busy}>
+      <form onSubmit={submit} aria-busy={busy} className="mt-8 grid gap-4.5">
         <Field
           key={String(recovery)}
           label={recovery ? "Código de recuperación" : "Código de seis dígitos"}
@@ -60,27 +61,33 @@ export function MfaForm({ challenge, onBack, onVerified }) {
           required
           disabled={busy}
         />
-        {error && <p role="alert">{error}</p>}
-        <Button type="submit" disabled={busy}>
-          {busy ? "Verificando…" : "Verificar código"}
-        </Button>
+        {error && <Paragraph role="alert" variant="danger" text={error} />}
+        <Button
+          type="submit"
+          disabled={busy}
+          text={busy ? "Verificando…" : "Verificar código"}
+        />
       </form>
-      <div className="actions">
+      <div className="mt-3 flex flex-wrap justify-between gap-2.5">
         {!challenge.enrollmentRequired && (
           <Button
             variant="link"
             disabled={busy}
+            text={
+              recovery ? "Usar el autenticador" : "Usar código de recuperación"
+            }
             onClick={() => {
               setRecovery(!recovery);
               setError("");
             }}
-          >
-            {recovery ? "Usar el autenticador" : "Usar código de recuperación"}
-          </Button>
+          />
         )}
-        <Button variant="link" disabled={busy} onClick={() => onBack("")}>
-          Volver al acceso
-        </Button>
+        <Button
+          variant="link"
+          disabled={busy}
+          text="Volver al acceso"
+          onClick={() => onBack("")}
+        />
       </div>
     </>
   );

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { activateAccount } from "../../services/activateAccount";
 import { Button } from "../atoms/button";
+import { Paragraph } from "../atoms/paragraph";
 import { Field } from "../molecules/field";
 
 export function ActivateForm({ onActivated, onBack }) {
@@ -34,11 +35,8 @@ export function ActivateForm({ onActivated, onBack }) {
 
   return (
     <>
-      <p>
-        Introduce el código de invitación de un solo uso y crea una contraseña
-        de al menos 15 caracteres.
-      </p>
-      <form onSubmit={submit} aria-busy={busy}>
+      <Paragraph text="Introduce el código de invitación de un solo uso y crea una contraseña de al menos 15 caracteres." />
+      <form onSubmit={submit} aria-busy={busy} className="mt-8 grid gap-4.5">
         <Field
           label="Código de activación"
           name="token"
@@ -70,15 +68,20 @@ export function ActivateForm({ onActivated, onBack }) {
           required
           disabled={busy}
         />
-        {error && <p role="alert">{error}</p>}
-        <Button type="submit" disabled={busy}>
-          {busy ? "Activando…" : "Activar cuenta"}
-        </Button>
+        {error && <Paragraph role="alert" variant="danger" text={error} />}
+        <Button
+          type="submit"
+          disabled={busy}
+          text={busy ? "Activando…" : "Activar cuenta"}
+        />
       </form>
-      <div className="actions">
-        <Button variant="link" disabled={busy} onClick={() => onBack("")}>
-          Volver al acceso
-        </Button>
+      <div className="mt-3 flex flex-wrap justify-between gap-2.5">
+        <Button
+          variant="link"
+          disabled={busy}
+          text="Volver al acceso"
+          onClick={() => onBack("")}
+        />
       </div>
     </>
   );

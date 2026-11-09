@@ -1,8 +1,15 @@
 import { useState } from "react";
 import { registerAdmin } from "../../services/registerAdmin";
 import { Button } from "../atoms/button";
+import { Paragraph } from "../atoms/paragraph";
+import { Title } from "../atoms/titles";
 import { Field } from "../molecules/field";
 import { SelectField } from "../molecules/selectField";
+
+const roleOptions = [
+  { value: "admissions", text: "Admisión" },
+  { value: "events", text: "Eventos" },
+];
 
 export function RegisterAdminForm({ onIssued }) {
   const [busy, setBusy] = useState(false);
@@ -31,13 +38,14 @@ export function RegisterAdminForm({ onIssued }) {
   }
 
   return (
-    <article>
-      <h3>Registrar cuenta por invitación</h3>
-      <p>
-        Crea una cuenta pendiente y genera un código de activación de un solo
-        uso válido por 24 horas.
-      </p>
-      <form onSubmit={submit} aria-busy={busy}>
+    <article className="rounded-[10px] border border-line bg-white p-6">
+      <Title
+        level="h3"
+        text="Registrar cuenta por invitación"
+        className="mb-1"
+      />
+      <Paragraph text="Crea una cuenta pendiente y genera un código de activación de un solo uso válido por 24 horas." />
+      <form onSubmit={submit} aria-busy={busy} className="mt-8 grid gap-4.5">
         <Field
           label="Nombre completo"
           name="name"
@@ -59,16 +67,16 @@ export function RegisterAdminForm({ onIssued }) {
           label="Rol"
           name="role"
           defaultValue="admissions"
+          options={roleOptions}
           required
           disabled={busy}
-        >
-          <option value="admissions">Admisión</option>
-          <option value="events">Eventos</option>
-        </SelectField>
-        {error && <p role="alert">{error}</p>}
-        <Button type="submit" disabled={busy}>
-          {busy ? "Generando invitación…" : "Crear invitación"}
-        </Button>
+        />
+        {error && <Paragraph role="alert" variant="danger" text={error} />}
+        <Button
+          type="submit"
+          disabled={busy}
+          text={busy ? "Generando invitación…" : "Crear invitación"}
+        />
       </form>
     </article>
   );

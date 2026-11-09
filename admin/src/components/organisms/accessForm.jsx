@@ -1,6 +1,12 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { FiKey, FiLock, FiSmartphone } from "react-icons/fi";
+import {
+  clearRecoveryPending,
+  markRecoveryPending,
+} from "../../services/session";
 import { Button } from "../atoms/button";
+import { Paragraph } from "../atoms/paragraph";
+import { Title } from "../atoms/titles";
 import { ActivateForm } from "./activateForm";
 import { LoginForm } from "./loginForm";
 import { MfaForm } from "./mfaForm";
@@ -22,8 +28,12 @@ export function AccessForm({ onAuthenticated, initialNotice }) {
   }, []);
   function accept(result) {
     setChallenge(null);
-    if (result.recoveryCodes) setVerified(result);
-    else onAuthenticated(result.session);
+    if (result.recoveryCodes) {
+      markRecoveryPending();
+      setVerified(result);
+    } else {
+      onAuthenticated(result.session);
+    }
   }
 
   let title = "Iniciar sesión";
@@ -42,15 +52,25 @@ export function AccessForm({ onAuthenticated, initialNotice }) {
   if (challenge || verified) icon = <FiSmartphone />;
 
   return (
-    <section className="form-card">
-      <div className="step-icon">{icon}</div>
-      <h2 tabIndex={-1} ref={heading}>
-        {title}
-      </h2>
+    <section className="w-[min(100%,410px)]">
+      <div className="grid h-12.5 w-12.5 place-items-center rounded-xl bg-soft text-[23px] text-blue-dark">
+        {icon}
+      </div>
+      <Title
+        level="h2"
+        size="page"
+        tabIndex={-1}
+        ref={heading}
+        text={title}
+        className="mt-5.5 mb-2.5"
+      />
       {verified ? (
         <RecoveryCodes
           codes={verified.recoveryCodes}
-          onSaved={() => onAuthenticated(verified.session)}
+          onSaved={() => {
+            clearRecoveryPending();
+            onAuthenticated(verified.session);
+          }}
         />
       ) : challenge ? (
         <MfaForm challenge={challenge} onBack={back} onVerified={accept} />
@@ -58,8 +78,15 @@ export function AccessForm({ onAuthenticated, initialNotice }) {
         <ActivateForm onActivated={back} onBack={back} />
       ) : (
         <>
-          <p>Accede al panel con tu cuenta institucional.</p>
-          {notice && <p role="status">{notice}</p>}
+          <Paragraph text="Accede al panel con tu cuenta institucional." />
+          {notice && (
+            <Paragraph
+              role="status"
+              variant="institutional"
+              className="mt-2.5"
+              text={notice}
+            />
+          )}
           <LoginForm
             onChallenge={(data) => {
               setNotice("");
@@ -69,16 +96,15 @@ export function AccessForm({ onAuthenticated, initialNotice }) {
               });
             }}
           />
-          <div className="actions">
+          <div className="mt-3 flex flex-wrap justify-between gap-2.5">
             <Button
               variant="link"
+              text="Activar cuenta con código"
               onClick={() => {
                 setNotice("");
                 setActivating(true);
               }}
-            >
-              Activar cuenta con código
-            </Button>
+            />
           </div>
         </>
       )}
