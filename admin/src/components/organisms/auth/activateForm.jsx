@@ -1,8 +1,10 @@
 import { useState } from "react";
-import { activateAccount } from "../../services/activateAccount";
-import { Button } from "../atoms/button";
-import { Paragraph } from "../atoms/paragraph";
-import { Field } from "../molecules/field";
+import { activateAccount } from "../../../services/activateAccount";
+import { Button } from "../../atoms/button";
+import { Paragraph } from "../../atoms/paragraph";
+import { Field } from "../../molecules/field";
+import { PasswordField } from "../../molecules/passwordField";
+import { StatusBanner } from "../../molecules/statusBanner";
 
 export function ActivateForm({ onActivated, onBack }) {
   const [busy, setBusy] = useState(false);
@@ -16,7 +18,7 @@ export function ActivateForm({ onActivated, onBack }) {
     const password = fields.get("password");
     const confirmPassword = fields.get("confirmPassword");
     if (password !== confirmPassword) {
-      setError("Las contraseñas no coinciden.");
+      setError("No se pudo activar la cuenta: Las contraseñas no coinciden.");
       return;
     }
     setBusy(true);
@@ -27,7 +29,7 @@ export function ActivateForm({ onActivated, onBack }) {
         "Cuenta activada. Inicia sesión para configurar el autenticador.",
       );
     } catch (failure) {
-      setError(failure.message);
+      setError(`No se pudo activar la cuenta: ${failure.message}`);
     } finally {
       setBusy(false);
     }
@@ -48,27 +50,25 @@ export function ActivateForm({ onActivated, onBack }) {
           required
           disabled={busy}
         />
-        <Field
+        <PasswordField
           label="Nueva contraseña"
           name="password"
-          type="password"
           minLength={15}
           maxLength={128}
           autoComplete="new-password"
           required
           disabled={busy}
         />
-        <Field
+        <PasswordField
           label="Confirmar contraseña"
           name="confirmPassword"
-          type="password"
           minLength={15}
           maxLength={128}
           autoComplete="new-password"
           required
           disabled={busy}
         />
-        {error && <Paragraph role="alert" variant="danger" text={error} />}
+        {error && <StatusBanner role="alert" variant="danger" text={error} />}
         <Button
           type="submit"
           disabled={busy}

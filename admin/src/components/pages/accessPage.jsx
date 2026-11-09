@@ -3,7 +3,7 @@ import campus from "@ipc/campus";
 import { Paragraph } from "../atoms/paragraph";
 import { Title } from "../atoms/titles";
 import { Brand } from "../molecules/brand";
-import { AccessForm } from "../organisms/accessForm";
+import { AccessForm } from "../organisms/auth/accessForm";
 
 export function AccessPage({ onAuthenticated, initialNotice }) {
   return (

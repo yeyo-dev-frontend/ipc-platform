@@ -1,10 +1,11 @@
 import { useState } from "react";
-import { registerAdmin } from "../../services/registerAdmin";
-import { Button } from "../atoms/button";
-import { Paragraph } from "../atoms/paragraph";
-import { Title } from "../atoms/titles";
-import { Field } from "../molecules/field";
-import { SelectField } from "../molecules/selectField";
+import { registerAdmin } from "../../../services/registerAdmin";
+import { Button } from "../../atoms/button";
+import { Paragraph } from "../../atoms/paragraph";
+import { Title } from "../../atoms/titles";
+import { Field } from "../../molecules/field";
+import { SelectField } from "../../molecules/selectField";
+import { StatusBanner } from "../../molecules/statusBanner";
 
 const roleOptions = [
   { value: "admissions", text: "Admisión" },
@@ -71,7 +72,7 @@ export function RegisterAdminForm({ onIssued }) {
           required
           disabled={busy}
         />
-        {error && <Paragraph role="alert" variant="danger" text={error} />}
+        {error && <StatusBanner role="alert" variant="danger" text={error} />}
         <Button
           type="submit"
           disabled={busy}

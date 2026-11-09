@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { Title } from "../atoms/titles";
-import { InvitationResult } from "../molecules/invitationResult";
+import { Title } from "../../atoms/titles";
+import { InvitationResult } from "../../molecules/admin/invitationResult";
 import { RegisterAdminForm } from "./registerAdminForm";
 import { ReissueActivationForm } from "./reissueActivationForm";
 

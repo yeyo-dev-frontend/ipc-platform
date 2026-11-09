@@ -51,7 +51,7 @@ export const WORKSPACE_AREAS = [
 ];
 
 export const ROLE_LABELS = {
-  admin: "Administrador",
+  admin: "Administración",
   admissions: "Admisión",
   events: "Eventos",
 };

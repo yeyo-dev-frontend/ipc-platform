@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
-import { Button } from "../atoms/button";
-import { Paragraph } from "../atoms/paragraph";
+import { copyText } from "../../../services/copyText";
+import { Button } from "../../atoms/button";
+import { Paragraph } from "../../atoms/paragraph";
 
 export function RecoveryCodes({ codes, onSaved }) {
   const [copied, setCopied] = useState(false);
@@ -15,12 +16,7 @@ export function RecoveryCodes({ codes, onSaved }) {
   }, []);
 
   async function copyCodes() {
-    try {
-      await navigator.clipboard?.writeText(codes.join("\n"));
-      setCopied(true);
-    } catch {
-      setCopied(false);
-    }
+    setCopied(await copyText(codes.join("\n")));
   }
 
   return (

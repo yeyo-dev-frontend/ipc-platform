@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { FiArrowRight } from "react-icons/fi";
-import { login } from "../../services/login";
-import { Button } from "../atoms/button";
-import { Paragraph } from "../atoms/paragraph";
-import { Field } from "../molecules/field";
+import { login } from "../../../services/login";
+import { Button } from "../../atoms/button";
+import { Field } from "../../molecules/field";
+import { PasswordField } from "../../molecules/passwordField";
+import { StatusBanner } from "../../molecules/statusBanner";
 
 export function LoginForm({ onChallenge }) {
   const [busy, setBusy] = useState(false);
@@ -35,14 +36,13 @@ export function LoginForm({ onChallenge }) {
         autoComplete="username"
         required
       />
-      <Field
+      <PasswordField
         label="Contraseña"
         name="password"
-        type="password"
         autoComplete="current-password"
         required
       />
-      {error && <Paragraph role="alert" variant="danger" text={error} />}
+      {error && <StatusBanner role="alert" variant="danger" text={error} />}
       <Button
         type="submit"
         disabled={busy}

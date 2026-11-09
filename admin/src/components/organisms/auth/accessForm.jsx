@@ -3,10 +3,11 @@ import { FiKey, FiLock, FiSmartphone } from "react-icons/fi";
 import {
   clearRecoveryPending,
   markRecoveryPending,
-} from "../../services/session";
-import { Button } from "../atoms/button";
-import { Paragraph } from "../atoms/paragraph";
-import { Title } from "../atoms/titles";
+} from "../../../services/session";
+import { Button } from "../../atoms/button";
+import { Paragraph } from "../../atoms/paragraph";
+import { Title } from "../../atoms/titles";
+import { StatusBanner } from "../../molecules/statusBanner";
 import { ActivateForm } from "./activateForm";
 import { LoginForm } from "./loginForm";
 import { MfaForm } from "./mfaForm";
@@ -51,6 +52,8 @@ export function AccessForm({ onAuthenticated, initialNotice }) {
   if (activating) icon = <FiKey />;
   if (challenge || verified) icon = <FiSmartphone />;
 
+  const isSuccessNotice = notice?.startsWith("Cuenta activada");
+
   return (
     <section className="w-[min(100%,410px)]">
       <div className="grid h-12.5 w-12.5 place-items-center rounded-xl bg-soft text-[23px] text-blue-dark">
@@ -62,7 +65,7 @@ export function AccessForm({ onAuthenticated, initialNotice }) {
         tabIndex={-1}
         ref={heading}
         text={title}
-        className="mt-5.5 mb-2.5"
+        className="mt-12.5 mb-2.5"
       />
       {verified ? (
         <RecoveryCodes
@@ -80,11 +83,11 @@ export function AccessForm({ onAuthenticated, initialNotice }) {
         <>
           <Paragraph text="Accede al panel con tu cuenta institucional." />
           {notice && (
-            <Paragraph
+            <StatusBanner
               role="status"
-              variant="institutional"
-              className="mt-2.5"
+              variant={isSuccessNotice ? "success" : "info"}
               text={notice}
+              className="mt-3"
             />
           )}
           <LoginForm

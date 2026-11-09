@@ -2,12 +2,10 @@ import { StrictMode, useEffect, useState } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { RoleRoute } from "./components/organisms/roleRoute";
+import { WorkspaceDashboard } from "./components/organisms/workspaceDashboard";
 import { AccessPage } from "./components/pages/accessPage";
 import { AreaPage } from "./components/pages/areaPage";
-import {
-  WorkspaceDashboard,
-  WorkspacePage,
-} from "./components/pages/workspacePage";
+import { WorkspacePage } from "./components/pages/workspacePage";
 import { WORKSPACE_AREAS } from "./data/workspaceAreas";
 import {
   acceptSession,

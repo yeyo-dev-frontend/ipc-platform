@@ -2,7 +2,9 @@ import { FiArrowLeft } from "react-icons/fi";
 import { Link } from "react-router-dom";
 import { Paragraph } from "../atoms/paragraph";
 import { Title } from "../atoms/titles";
-import { AccountInvitations } from "../organisms/accountInvitations";
+import { AccountInvitations } from "../organisms/admin/accountInvitations";
+import { AdmissionsPanel } from "../organisms/admissions/admissionsPanel";
+import { EventsPanel } from "../organisms/events/eventsPanel";
 
 export function AreaPage({ area }) {
   const { Icon, title, description, slug } = area;
@@ -21,6 +23,8 @@ export function AreaPage({ area }) {
         <Paragraph text={description} />
       </div>
       {slug === "cuentas" && <AccountInvitations />}
+      {slug === "admision" && <AdmissionsPanel />}
+      {slug === "eventos" && <EventsPanel />}
     </section>
   );
 }

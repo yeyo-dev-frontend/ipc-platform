@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import QRCode from "qrcode";
 import { Image } from "@ipc/image";
-import { Paragraph } from "../atoms/paragraph";
+import { Paragraph } from "../../atoms/paragraph";
 
 export function AuthenticatorSetup({ provisioningUri, secret }) {
   const [source, setSource] = useState(null);
