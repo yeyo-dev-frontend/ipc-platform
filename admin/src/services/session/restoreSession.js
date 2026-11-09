@@ -1,10 +1,13 @@
 import { logoutSession } from "./logoutSession";
+import { fetchCsrf } from "./requestRefresh";
+import { sessionCommand } from "./sessionCommand";
 import {
   UNCONFIRMED_RECOVERY_NOTICE,
-  clearRecoveryPending,
+  isRecoveryOwner,
+  WAITING_NOTICE,
   isRecoveryPending,
+  RECOVERY_KEY,
 } from "./recoveryPending";
-import { fetchCsrf, requestRefresh } from "./requestRefresh";
 import { broadcastLogout, broadcastSession } from "./sessionChannel";
 import { pauseForBroadcast, withSessionLock } from "./sessionLock";
 import {
@@ -16,9 +19,16 @@ import {
   shareRefresh,
 } from "./sessionStore";
 
-export async function restoreSession() {
+async function restore() {
   if (isRecoveryPending()) {
-    clearRecoveryPending();
+    if (performance.getEntriesByType("navigation")[0]?.type !== "reload") {
+      sessionStorage.removeItem(RECOVERY_KEY);
+    }
+    if (
+      !isRecoveryOwner() ||
+      performance.getEntriesByType("navigation")[0]?.type !== "reload"
+    )
+      throw new Error(WAITING_NOTICE);
     await logoutSession(UNCONFIRMED_RECOVERY_NOTICE);
     throw new Error(UNCONFIRMED_RECOVERY_NOTICE);
   }
@@ -36,7 +46,8 @@ export async function restoreSession() {
         throw error;
       }
       try {
-        const session = await requestRefresh(csrfToken);
+        const session = await sessionCommand("refresh", csrfToken);
+        if (isRecoveryPending()) throw new Error(WAITING_NOTICE);
         setLastActivityAt(Date.now());
         setNextRetryAt(0);
         applySession(session, "");
@@ -53,4 +64,11 @@ export async function restoreSession() {
       }
     }),
   );
+}
+
+let restoring = null;
+export function restoreSession() {
+  return (restoring ??= restore().finally(() => {
+    restoring = null;
+  }));
 }

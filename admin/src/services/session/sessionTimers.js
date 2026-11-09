@@ -1,4 +1,5 @@
 import { logoutSession } from "./logoutSession";
+import { isRecoveryPending } from "./recoveryPending";
 import { refreshSession } from "./refreshSession";
 import { broadcastLogout, subscribeChannel } from "./sessionChannel";
 import {
@@ -50,6 +51,7 @@ export function syncSessionTimers(session) {
 
 subscribeChannel((data) => {
   if (data?.type === "session" && data.session) {
+    if (isRecoveryPending()) return;
     setLastActivityAt(Math.max(getLastActivityAt(), data.session.obtainedAt));
     applySession(data.session, "");
   } else if (data?.type === "logout") {

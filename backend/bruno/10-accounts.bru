@@ -1,0 +1,16 @@
+meta {
+  name: Listar cuentas administrativas
+  type: http
+  seq: 10
+}
+
+get {
+  url: http://127.0.0.1:3000/api/v1/auth/accounts
+  body: none
+  auth: none
+}
+
+headers {
+  X-IPC-Client: admin
+  Authorization: Bearer {{accessToken}}
+}

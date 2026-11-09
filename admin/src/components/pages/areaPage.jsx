@@ -21,6 +21,13 @@ export function AreaPage({ area }) {
         <Icon aria-hidden="true" className="text-2xl text-blue-dark" />
         <Title level="h2" text={title} className="mt-3 mb-1" />
         <Paragraph text={description} />
+        {area.pending && (
+          <Paragraph
+            size="small"
+            className="mt-2"
+            text="Esta área está en preparación."
+          />
+        )}
       </div>
       {slug === "cuentas" && <AccountInvitations />}
       {slug === "admision" && <AdmissionsPanel />}

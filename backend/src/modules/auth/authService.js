@@ -9,6 +9,7 @@ export async function createAuthService(repository, config) {
   const tokens = createAccessTokenService(config);
   const mfa = createMfaService(repository, tokens, config);
   return {
+    listAccounts: repository.listAccounts,
     ...mfa,
     ...createInvitationService(repository),
     ...(await createLoginService(repository, mfa)),

@@ -1,9 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { FiKey, FiLock, FiSmartphone } from "react-icons/fi";
-import {
-  clearRecoveryPending,
-  markRecoveryPending,
-} from "../../../services/session";
+import { clearRecoveryPending } from "../../../services/session";
+import { RECOVERY_KEY } from "../../../services/session/recoveryPending";
 import { Button } from "../../atoms/button";
 import { Paragraph } from "../../atoms/paragraph";
 import { Title } from "../../atoms/titles";
@@ -20,6 +18,17 @@ export function AccessForm({ onAuthenticated, initialNotice }) {
   const [notice, setNotice] = useState(initialNotice);
   const heading = useRef(null);
   useEffect(() => {
+    if (!verified) return;
+    const cancel = (event) => {
+      if (event.key === RECOVERY_KEY && !event.newValue) {
+        setVerified(null);
+        setNotice("Se canceló el acceso desde otra pestaña.");
+      }
+    };
+    window.addEventListener("storage", cancel);
+    return () => window.removeEventListener("storage", cancel);
+  }, [verified]);
+  useEffect(() => {
     setNotice(initialNotice);
   }, [initialNotice]);
   const back = useCallback((message) => {
@@ -30,7 +39,6 @@ export function AccessForm({ onAuthenticated, initialNotice }) {
   function accept(result) {
     setChallenge(null);
     if (result.recoveryCodes) {
-      markRecoveryPending();
       setVerified(result);
     } else {
       onAuthenticated(result.session);

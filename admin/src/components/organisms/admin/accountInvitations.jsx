@@ -3,12 +3,14 @@ import { Title } from "../../atoms/titles";
 import { InvitationResult } from "../../molecules/admin/invitationResult";
 import { RegisterAdminForm } from "./registerAdminForm";
 import { ReissueActivationForm } from "./reissueActivationForm";
+import { AccountList } from "./accountList";
 
 export function AccountInvitations() {
   const [invitation, setInvitation] = useState(null);
 
   return (
     <section aria-labelledby="invitations-heading">
+      <AccountList revision={invitation} />
       <Title
         level="h2"
         id="invitations-heading"

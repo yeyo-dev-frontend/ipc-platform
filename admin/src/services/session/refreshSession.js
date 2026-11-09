@@ -1,4 +1,5 @@
-import { requestRefresh } from "./requestRefresh";
+import { sessionCommand } from "./sessionCommand";
+import { isRecoveryPending } from "./recoveryPending";
 import { broadcastLogout, broadcastSession } from "./sessionChannel";
 import { pauseForBroadcast, withSessionLock } from "./sessionLock";
 import {
@@ -15,7 +16,7 @@ export function refreshSession() {
   return shareRefresh(() =>
     withSessionLock(async () => {
       const current = getSession();
-      if (!current) return null;
+      if (!current || isRecoveryPending()) return null;
       if (
         current.accessToken !== previousToken &&
         current.expiresAt > Date.now()
@@ -23,7 +24,8 @@ export function refreshSession() {
         return current;
       }
       try {
-        const session = await requestRefresh(current.csrfToken);
+        const session = await sessionCommand("refresh", current.csrfToken);
+        if (isRecoveryPending()) return null;
         setNextRetryAt(0);
         applySession(session, "");
         broadcastSession(session);

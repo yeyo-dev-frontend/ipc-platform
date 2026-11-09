@@ -17,6 +17,7 @@ export const WORKSPACE_AREAS = [
   },
   {
     slug: "eventos",
+    pending: true,
     path: "/eventos",
     Icon: FiCalendar,
     title: "Eventos",
@@ -25,6 +26,7 @@ export const WORKSPACE_AREAS = [
   },
   {
     slug: "admision",
+    pending: true,
     path: "/admision",
     Icon: FiInbox,
     title: "Admisión",
@@ -33,6 +35,7 @@ export const WORKSPACE_AREAS = [
   },
   {
     slug: "contenido",
+    pending: true,
     path: "/contenido",
     Icon: FiFileText,
     title: "Contenido",
@@ -41,6 +44,7 @@ export const WORKSPACE_AREAS = [
   },
   {
     slug: "auditoria",
+    pending: true,
     path: "/auditoria",
     Icon: FiShield,
     title: "Auditoría",

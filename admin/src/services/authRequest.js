@@ -30,10 +30,16 @@ async function sendAuth(path, options, status) {
   return body?.data;
 }
 
-export function getAuth(path, status) {
+export function getAuth(path, status, accessToken) {
   return sendAuth(
     path,
-    { method: "GET", headers: { "X-IPC-Client": "admin" } },
+    {
+      method: "GET",
+      headers: {
+        "X-IPC-Client": "admin",
+        ...(accessToken && { Authorization: "Bearer " + accessToken }),
+      },
+    },
     status,
   );
 }

@@ -19,6 +19,9 @@ export function createAuthRoutes(service, config, clientIp) {
     await next();
   };
   routes.route("/", createCredentialRoutes(service, config, throttle));
+  routes.get("/accounts", authenticated, requireAdmin, async (c) =>
+    c.json({ data: { accounts: await service.listAccounts() } }),
+  );
   routes.post("/register", authenticated, requireAdmin, requireCsrf, throttle, async (c) => {
     const data = await readInput(c, registerSchema);
     return c.json({ data: await service.register(c.get("actor"), data, c.get("requestId")) }, 201);

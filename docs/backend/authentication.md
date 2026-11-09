@@ -30,6 +30,7 @@ Prefijo /api/v1/auth. Respuestas con `{ "data": ... }`; errores con error.code, 
 | POST /activate | token, password | Código único vigente | 200: cuenta activada |
 | POST /login | email, password | Público con límites | 200: admin, accessToken, tokenType, expiresIn, csrfToken; refresh solo por cookie |
 | GET /me | Sin cuerpo | Bearer válido | 200: cuenta y CSRF de su sesión |
+| GET /accounts | Sin cuerpo | Bearer vigente y rol admin | 200: data.accounts con id, name, email, role e isActive; 401 sin sesión y 403 para admissions/events |
 | GET /csrf | Sin cuerpo | Cookie refresh vigente + X-IPC-Client | 200: CSRF para recuperar el flujo tras recarga |
 | POST /refresh | {} | Cookie refresh + CSRF | 200: nuevo JWT y nueva cookie refresh |
 | POST /logout | {} | Cookie refresh + CSRF; no exige JWT vigente | 204: familia revocada y cookie eliminada |
@@ -62,13 +63,13 @@ Rotación transaccional:
 
 La familia vence a las ocho horas de login o tras treinta minutos de inactividad. Tanto peticiones Bearer autenticadas como renovaciones exitosas actualizan actividad. /csrf no prolonga la sesión. Renovar no extiende el máximo absoluto. Logout o reutilización invalida todos los JWT y refresh de esa familia; otras sesiones de la misma cuenta permanecen activas.
 
-**Concurrencia estricta:** dos renovaciones con el mismo refresh producen una respuesta exitosa y otra de reutilización; la familia termina revocada. El futuro cliente debe coordinar una sola renovación, incluso entre pestañas. Si se pierde la respuesta después de confirmar la rotación, reintentar con el token antiguo exige nuevo login. No hay ventana de tolerancia que permita reusar tokens.
+**Concurrencia estricta:** dos renovaciones con el mismo refresh producen una respuesta exitosa y otra de reutilización; la familia termina revocada. El panel serializa las renovaciones entre pestañas mediante Web Locks o SharedWorker. Si se pierde la respuesta después de confirmar la rotación, reintentar con el token antiguo exige nuevo login. No hay ventana de tolerancia que permita reusar tokens.
 
 ## CSRF, recarga y cierre
 
 CSRF es un HMAC ligado al identificador de sesión, con clave derivada de JWT_SECRET y un contexto separado. No autentica por sí solo y no sustituye al JWT ni al refresh. Permanece estable durante la familia y difiere entre sesiones.
 
-Tras recargar una futura aplicación, el access token en memoria desaparece. El flujo será GET /csrf con cookies → POST /refresh con cookies y CSRF → guardar el nuevo JWT en memoria. No hace falta enviar un JWT vencido para renovar. Logout usa refresh + CSRF, por lo que también funciona con access token vencido. Un origen externo no recibe permiso CORS para leer los secretos.
+Tras recargar el panel, el access token en memoria desaparece. El flujo es GET /csrf con cookies → POST /refresh con cookies y CSRF → guardar el nuevo JWT en memoria. No hace falta enviar un JWT vencido para renovar. Logout usa refresh + CSRF, por lo que también funciona con access token vencido. Un origen externo no recibe permiso CORS para leer los secretos.
 
 ## Cuentas y controles conservados
 

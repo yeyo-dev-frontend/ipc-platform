@@ -14,11 +14,19 @@ import {
   restoreSession,
 } from "./services/session";
 import "./index.css";
+import {
+  isRecoveryPending,
+  WAITING_NOTICE,
+  RECOVERY_KEY,
+  UNCONFIRMED_RECOVERY_NOTICE,
+} from "./services/session/recoveryPending";
+import { Button } from "./components/atoms/button";
 
 function AdminApp() {
   const [restoring, setRestoring] = useState(true);
   const [session, setSession] = useState(null);
   const [notice, setNotice] = useState("");
+  const [waiting, setWaiting] = useState(false);
 
   useEffect(() => {
     const stop = observeSession(
@@ -27,18 +35,50 @@ function AdminApp() {
         setNotice(nextNotice);
       },
     );
+    const syncPending = (event) => {
+      if (event.key !== RECOVERY_KEY) return;
+      setWaiting(isRecoveryPending());
+      setNotice(isRecoveryPending() ? WAITING_NOTICE : "");
+    };
+    window.addEventListener("storage", syncPending);
     restoreSession()
       .then((restored) => {
         if (restored) setSession(restored);
       })
       .catch((error) => {
+        setWaiting(isRecoveryPending());
         if (error?.message) setNotice(error.message);
       })
       .finally(() => setRestoring(false));
-    return stop;
+    return () => {
+      stop();
+      window.removeEventListener("storage", syncPending);
+    };
   }, []);
 
-  if (restoring) return null;
+  if (restoring || waiting)
+    return (
+      <main className="grid min-h-svh place-content-center gap-4 bg-surface p-6 text-center">
+        <p role="status">
+          {restoring ? "Recuperando sesión…" : notice || WAITING_NOTICE}
+        </p>
+        {waiting && !restoring && (
+          <Button
+            variant="secondary"
+            onClick={async () => {
+              try {
+                await logoutSession(UNCONFIRMED_RECOVERY_NOTICE);
+                setWaiting(false);
+              } catch (error) {
+                setNotice(error.message);
+              }
+            }}
+          >
+            Cancelar el acceso pendiente
+          </Button>
+        )}
+      </main>
+    );
   if (!session) {
     return (
       <Routes>

@@ -1,28 +1,41 @@
-const KEY = "ipc-admin-recovery-pending";
-
+export const RECOVERY_KEY = "ipc-admin-recovery-pending";
+export const WAITING_NOTICE =
+  "Confirma tus códigos de recuperación en la pestaña donde configuraste el autenticador.";
 export const UNCONFIRMED_RECOVERY_NOTICE =
-  "Se canceló el acceso porque recargaste la página antes de confirmar tus códigos de recuperación. Si no alcanzaste a guardarlos, solicita asistencia al administrador.";
+  "El acceso se canceló antes de confirmar los códigos de recuperación. Si no los guardaste, solicita asistencia al administrador.";
 
 export function markRecoveryPending() {
+  if (isRecoveryPending() && !isRecoveryOwner())
+    throw new Error(WAITING_NOTICE);
   try {
-    sessionStorage.setItem(KEY, "1");
+    const id = String(Math.random()).slice(2);
+    sessionStorage.setItem(RECOVERY_KEY, id);
+    localStorage.setItem(RECOVERY_KEY, id);
   } catch {
-    // Entornos sin sessionStorage conservan únicamente el bloqueo en memoria.
-  }
-}
-
-export function clearRecoveryPending() {
-  try {
-    sessionStorage.removeItem(KEY);
-  } catch {
-    // Ignorar errores de almacenamiento restringido.
+    throw new Error(
+      "Permite el almacenamiento del sitio para configurar el autenticador.",
+    );
   }
 }
 
 export function isRecoveryPending() {
   try {
-    return sessionStorage.getItem(KEY) === "1";
+    return Boolean(localStorage.getItem(RECOVERY_KEY));
   } catch {
     return false;
+  }
+}
+export function isRecoveryOwner() {
+  return (
+    isRecoveryPending() &&
+    sessionStorage.getItem(RECOVERY_KEY) === localStorage.getItem(RECOVERY_KEY)
+  );
+}
+export function clearRecoveryPending() {
+  if (isRecoveryPending()) localStorage.removeItem(RECOVERY_KEY);
+  try {
+    sessionStorage.removeItem(RECOVERY_KEY);
+  } catch {
+    /* El almacenamiento puede estar deshabilitado. */
   }
 }

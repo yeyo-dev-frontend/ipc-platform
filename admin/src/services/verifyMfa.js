@@ -1,13 +1,32 @@
 import { postAuth } from "./authRequest";
 import { parseSession } from "./session";
+import { logoutSession } from "./session/logoutSession";
+import {
+  markRecoveryPending,
+  clearRecoveryPending,
+  isRecoveryOwner,
+  UNCONFIRMED_RECOVERY_NOTICE,
+} from "./session/recoveryPending";
 
 export async function verifyMfa(challenge, code) {
-  const data = await postAuth(
-    "mfa/verify",
-    { challengeToken: challenge.challengeToken, code },
-    200,
-  );
+  if (challenge.enrollmentRequired) markRecoveryPending();
+  let data;
+  try {
+    data = await postAuth(
+      "mfa/verify",
+      { challengeToken: challenge.challengeToken, code },
+      200,
+    );
+  } catch (error) {
+    if (challenge.enrollmentRequired && error.status && isRecoveryOwner())
+      clearRecoveryPending();
+    throw error;
+  }
   const session = parseSession(data);
+  if (challenge.enrollmentRequired && !isRecoveryOwner()) {
+    await logoutSession(UNCONFIRMED_RECOVERY_NOTICE);
+    throw new Error(UNCONFIRMED_RECOVERY_NOTICE);
+  }
   const { recoveryCodes } = data ?? {};
   if (
     challenge.enrollmentRequired &&

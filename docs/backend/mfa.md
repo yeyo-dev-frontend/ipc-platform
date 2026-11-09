@@ -41,7 +41,7 @@ Implementado: enrolamiento obligatorio, TOTP, anti-replay, desafío temporal, re
 
 Desde el 8 de noviembre, el panel envía el código como texto a `POST /api/v1/auth/mfa/verify`. En el enrolamiento muestra la clave manual y, tras el 200, los diez códigos de recuperación hasta que el usuario confirme que los guardó. Una cuenta ya configurada puede elegir entre TOTP y un código de recuperación. Ante un 401 puede corregir el código mientras el desafío siga vigente. Al vencer el desafío o recibir un 429 vuelve al acceso con el mensaje correspondiente.
 
-El desafío, el JWT, el token CSRF y los códigos de recuperación se mantienen solo en memoria. La API entrega el refresh en una cookie HttpOnly. Una recarga pierde el estado del panel, incluidos los códigos aún visibles. Quedan pendientes la restauración y renovación de sesión y el cierre de sesión. Producción requiere revisar HTTPS/cookies, infraestructura y recuperación operativa. También falta la limpieza periódica de desafíos y filas vencidas.
+El desafío, el JWT, el token CSRF y los códigos de recuperación se mantienen solo en memoria. La API entrega el refresh en una cookie HttpOnly. El panel restaura y renueva la sesión con esa cookie y permite cerrar sesión. Durante el primer enrolamiento, las demás pestañas esperan hasta confirmar los códigos o cancelar el acceso. Recargar la pestaña original antes de confirmar pierde los códigos visibles y cancela esa sesión. Producción requiere revisar HTTPS/cookies, infraestructura y recuperación operativa. También falta la limpieza periódica de desafíos y filas vencidas.
 
 ## Verificación
 
