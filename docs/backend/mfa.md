@@ -21,6 +21,8 @@ POST /api/v1/auth/mfa/verify: { challengeToken, code }. Admite seis dígitos TOT
 
 Refresh y logout conservan sus contratos y CSRF. No persistir JWT, desafío, secreto ni recuperación en archivos compartidos o localStorage.
 
+Si el panel pierde la respuesta durante el primer enrolamiento, conserva la cuenta en la aplicación autenticadora y usa «Reiniciar acceso» al recuperar la conexión. Las demás pestañas esperan hasta que termine la cancelación. El siguiente login indica si debes configurar el autenticador o introducir un código actual. Si la API ya entregó los códigos de recuperación y la respuesta se perdió, esos códigos no pueden volver a mostrarse.
+
 ## Persistencia y concurrencia
 
 Admin almacena mfaSecret cifrado AES-256-GCM con IV aleatorio y AAD ligado a su UUID; mfaLastStep previene replay TOTP con ventana ±1 intervalo. La clave independiente vive exclusivamente en MFA_ENCRYPTION_KEY.

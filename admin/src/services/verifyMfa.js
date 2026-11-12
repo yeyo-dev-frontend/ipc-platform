@@ -18,7 +18,11 @@ export async function verifyMfa(challenge, code) {
       200,
     );
   } catch (error) {
-    if (challenge.enrollmentRequired && error.status && isRecoveryOwner())
+    if (
+      challenge.enrollmentRequired &&
+      [400, 401, 403, 413, 415, 422, 429].includes(error.status) &&
+      isRecoveryOwner()
+    )
       clearRecoveryPending();
     throw error;
   }

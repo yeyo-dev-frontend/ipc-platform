@@ -1,6 +1,6 @@
 export const RECOVERY_KEY = "ipc-admin-recovery-pending";
 export const WAITING_NOTICE =
-  "Confirma tus códigos de recuperación en la pestaña donde configuraste el autenticador.";
+  "Termina la configuración del autenticador en la pestaña donde la empezaste.";
 export const UNCONFIRMED_RECOVERY_NOTICE =
   "El acceso se canceló antes de confirmar los códigos de recuperación. Si no los guardaste, solicita asistencia al administrador.";
 

@@ -55,6 +55,8 @@ Estas decisiones superan las referencias históricas Express/ES6 estricto para b
 
 ## Siguiente tarea
 
+Revisión del acceso del 12 de noviembre de 2026. Pasaron las 50 pruebas del backend con PostgreSQL, el lint y la compilación de admin. En Edge un lector independiente decodificó el QR con logo de una cuenta simulada. Se confirmó un cierre pendiente del primer enrolamiento: si la solicitud de verificación falla por red y la persona vuelve al acceso, otra pestaña sigue pidiendo confirmar códigos que nunca se mostraron. Corregido el mismo día. Ante un resultado incierto, la pestaña original conserva la opción «Reiniciar acceso» incluso después del vencimiento. Con conexión, comprueba si hay una sesión accesible por cookie, la cierra si existe y libera la espera de las otras pestañas. En Edge se comprobaron con respuestas controladas la petición perdida y la respuesta perdida después de activar MFA, con y sin cookie recibida. Un 401 por código incorrecto permite corregirlo en el mismo formulario. La recuperación de contraseña y de todos los factores, la prueba física con Authy y la configuración operativa de producción siguen pendientes.
+
 La gestión de cuentas incluye ahora listado de estados (`GET /api/v1/auth/accounts`) y desactivación transaccional con protección del último administrador activo y revocación inmediata de sesiones (`POST /api/v1/auth/accounts/deactivate`). La siguiente etapa propuesta es la recuperación asistida de cuentas activas por el administrador, antes de pasar a los módulos de negocio (Eventos, Admisión y Contenido).
 
 ## Verificación del 9 de noviembre

@@ -7,6 +7,9 @@ async function sendAuth(path, options, status) {
     response = await fetch("/api/v1/auth/" + path, {
       ...options,
       credentials: "same-origin",
+      signal: ["mfa/verify", "csrf", "logout"].includes(path)
+        ? AbortSignal.timeout(30_000)
+        : undefined,
     });
   } catch {
     throw new Error(unavailable);

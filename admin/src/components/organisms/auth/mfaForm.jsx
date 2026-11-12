@@ -1,5 +1,10 @@
 import { useEffect, useState } from "react";
 import { verifyMfa } from "../../../services/verifyMfa";
+import {
+  isRecoveryOwner,
+  RECOVERY_KEY,
+} from "../../../services/session/recoveryPending";
+import { logoutSession } from "../../../services/session/logoutSession";
 import { Button } from "../../atoms/button";
 import { AuthenticatorSetup } from "../../molecules/auth/authenticatorSetup";
 import { Field } from "../../molecules/field";
@@ -11,14 +16,24 @@ export function MfaForm({ challenge, onBack, onVerified }) {
   const [recovery, setRecovery] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
+  const [uncertain, setUncertain] = useState(false);
   useEffect(() => {
-    if (busy) return;
+    if (!uncertain) return;
+    const cancelled = (event) => {
+      if (event.key === RECOVERY_KEY && !isRecoveryOwner())
+        onBack("Se canceló el intento de acceso.");
+    };
+    window.addEventListener("storage", cancelled);
+    return () => window.removeEventListener("storage", cancelled);
+  }, [uncertain, onBack]);
+  useEffect(() => {
+    if (busy || uncertain) return;
     const timer = setTimeout(
       () => onBack(expired),
       challenge.deadline - Date.now(),
     );
     return () => clearTimeout(timer);
-  }, [busy, challenge.deadline, onBack]);
+  }, [busy, uncertain, challenge.deadline, onBack]);
 
   async function submit(event) {
     event.preventDefault();
@@ -30,6 +45,10 @@ export function MfaForm({ challenge, onBack, onVerified }) {
     try {
       onVerified(await verifyMfa(challenge, code));
     } catch (failure) {
+      if (challenge.enrollmentRequired && isRecoveryOwner()) {
+        setUncertain(true);
+        return;
+      }
       if (failure.status === 429) return onBack(failure.message);
       if (Date.now() >= challenge.deadline) return onBack(expired);
       setError(failure.message);
@@ -38,6 +57,37 @@ export function MfaForm({ challenge, onBack, onVerified }) {
     }
   }
 
+  if (uncertain) {
+    async function restart() {
+      if (busy) return;
+      setBusy(true);
+      setError("");
+      try {
+        if (isRecoveryOwner()) await logoutSession();
+        onBack(
+          "Vuelve a iniciar sesión. Si tu autenticador ya quedó vinculado, introduce su código actual.",
+        );
+      } catch (failure) {
+        setError(failure.message);
+      } finally {
+        setBusy(false);
+      }
+    }
+    return (
+      <div className="mt-4 grid gap-4">
+        <StatusBanner
+          role="alert"
+          text="No pudimos confirmar si el autenticador quedó vinculado. Conserva la cuenta en tu aplicación y, cuando tengas conexión, reinicia el acceso."
+        />
+        {error && <StatusBanner role="alert" variant="danger" text={error} />}
+        <Button
+          onClick={restart}
+          disabled={busy}
+          text={busy ? "Cancelando intento…" : "Reiniciar acceso"}
+        />
+      </div>
+    );
+  }
   return (
     <>
       {challenge.enrollmentRequired && (
