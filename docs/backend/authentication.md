@@ -31,6 +31,7 @@ Prefijo /api/v1/auth. Respuestas con `{ "data": ... }`; errores con error.code, 
 | POST /login | email, password | Público con límites | 200: admin, accessToken, tokenType, expiresIn, csrfToken; refresh solo por cookie |
 | GET /me | Sin cuerpo | Bearer válido | 200: cuenta y CSRF de su sesión |
 | GET /accounts | Sin cuerpo | Bearer vigente y rol admin | 200: data.accounts con id, name, email, role e isActive; 401 sin sesión y 403 para admissions/events |
+| POST /accounts/deactivate | id (UUID) | Bearer + CSRF + rol admin | 200: data.admin con isActive=false, revoca sesiones/desafíos MFA y protege al último admin activo (409 LAST_ADMIN_PROTECTED) |
 | GET /csrf | Sin cuerpo | Cookie refresh vigente + X-IPC-Client | 200: CSRF para recuperar el flujo tras recarga |
 | POST /refresh | {} | Cookie refresh + CSRF | 200: nuevo JWT y nueva cookie refresh |
 | POST /logout | {} | Cookie refresh + CSRF; no exige JWT vigente | 204: familia revocada y cookie eliminada |

@@ -39,6 +39,7 @@ const weights = {
 };
 
 export function Title({
+  as,
   level = "h1",
   size = "default",
   variant = "default",
@@ -49,7 +50,7 @@ export function Title({
   className = "",
   ...props
 }) {
-  const Tag = level;
+  const Tag = as || level;
   return (
     <Tag
       className={twMerge(

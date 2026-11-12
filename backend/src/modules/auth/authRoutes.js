@@ -3,7 +3,12 @@ import { adminRequest, noStore } from "../../middleware/adminRequest.js";
 import { jsonBody } from "../../middleware/requestBody.js";
 import { Hono } from "hono";
 import { authenticate, requireAdmin, requireCsrf } from "../../middleware/authenticate.js";
-import { activateSchema, registerSchema, reissueSchema } from "./authSchema.js";
+import {
+  activateSchema,
+  deactivateAccountSchema,
+  registerSchema,
+  reissueSchema,
+} from "./authSchema.js";
 import { createCredentialRoutes } from "./credentialRoutes.js";
 
 export function createAuthRoutes(service, config, clientIp) {
@@ -21,6 +26,19 @@ export function createAuthRoutes(service, config, clientIp) {
   routes.route("/", createCredentialRoutes(service, config, throttle));
   routes.get("/accounts", authenticated, requireAdmin, async (c) =>
     c.json({ data: { accounts: await service.listAccounts() } }),
+  );
+  routes.post(
+    "/accounts/deactivate",
+    authenticated,
+    requireAdmin,
+    requireCsrf,
+    throttle,
+    async (c) => {
+      const data = await readInput(c, deactivateAccountSchema);
+      return c.json({
+        data: await service.deactivateAccount(c.get("actor"), data.id, c.get("requestId")),
+      });
+    },
   );
   routes.post("/register", authenticated, requireAdmin, requireCsrf, throttle, async (c) => {
     const data = await readInput(c, registerSchema);

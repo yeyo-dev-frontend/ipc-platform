@@ -19,6 +19,15 @@ export function createActivationRepository(db) {
             "ACCOUNT_ACTIVE",
             "Esta cuenta ya está activa. No se puede reiniciar su contraseña con una invitación.",
           );
+        const pendingActivation = await tx.activation.findFirst({
+          where: { adminId: admin.id, usedAt: null },
+        });
+        if (!pendingActivation)
+          throw new AppError(
+            409,
+            "ACCOUNT_DEACTIVATED",
+            "Esta cuenta fue desactivada. No se puede reemitir su invitación inicial.",
+          );
         await tx.activation.deleteMany({ where: { adminId: admin.id } });
         await tx.activation.create({ data: { adminId: admin.id, tokenHash, expiresAt } });
         await recordAudit(

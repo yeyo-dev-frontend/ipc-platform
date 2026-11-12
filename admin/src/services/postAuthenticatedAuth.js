@@ -29,3 +29,6 @@ export function listAccounts() {
     getAuth("accounts", 200, session.accessToken),
   );
 }
+export function deactivateAccount(id) {
+  return postAuthenticatedAuth("accounts/deactivate", { id }, 200);
+}

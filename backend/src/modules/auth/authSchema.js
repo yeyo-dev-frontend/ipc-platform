@@ -10,6 +10,11 @@ export const registerSchema = z
   })
   .strict();
 export const reissueSchema = z.object({ email: emailSchema }).strict();
+export const deactivateAccountSchema = z
+  .object({
+    id: z.string().uuid(),
+  })
+  .strict();
 export const loginSchema = z
   .object({
     email: emailSchema,

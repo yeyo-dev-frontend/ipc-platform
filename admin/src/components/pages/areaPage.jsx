@@ -1,5 +1,5 @@
 import { FiArrowLeft } from "react-icons/fi";
-import { Link } from "react-router-dom";
+import { Link } from "../atoms/links";
 import { Paragraph } from "../atoms/paragraph";
 import { Title } from "../atoms/titles";
 import { AccountInvitations } from "../organisms/admin/accountInvitations";
@@ -10,10 +10,7 @@ export function AreaPage({ area }) {
   const { Icon, title, description, slug } = area;
   return (
     <section>
-      <Link
-        to="/"
-        className="mt-4 inline-flex items-center gap-2 font-poppins text-sm font-bold text-blue-dark hover:underline focus-visible:outline-3 focus-visible:outline-offset-3 focus-visible:outline-focus"
-      >
+      <Link to="/" className="mt-4">
         <FiArrowLeft aria-hidden="true" />
         Volver al escritorio
       </Link>

@@ -1,0 +1,24 @@
+meta {
+  name: Desactivar cuenta administrativa
+  type: http
+  seq: 11
+}
+
+post {
+  url: {{baseUrl}}/api/v1/auth/accounts/deactivate
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+  X-IPC-Client: admin
+  X-CSRF-Token: {{csrfToken}}
+  Authorization: Bearer {{accessToken}}
+}
+
+body:json {
+  {
+    "id": "{{targetAdminId}}"
+  }
+}

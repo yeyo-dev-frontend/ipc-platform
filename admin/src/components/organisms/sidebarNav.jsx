@@ -1,18 +1,11 @@
 import { useState } from "react";
 import { FiGrid, FiLogOut } from "react-icons/fi";
-import { Link, NavLink } from "react-router-dom";
 import { ROLE_LABELS, WORKSPACE_AREAS } from "../../data/workspaceAreas";
 import { Badge } from "../atoms/badge";
 import { Button } from "../atoms/button";
+import { Link } from "../atoms/links";
 import { Paragraph } from "../atoms/paragraph";
 import { Brand } from "../molecules/brand";
-
-const navLinkClass = ({ isActive }) =>
-  `flex items-center gap-3 rounded-[8px] px-3.5 py-2.5 text-sm font-bold transition-colors focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-focus ${
-    isActive
-      ? "bg-white text-blue-dark"
-      : "text-white/85 hover:bg-white/10 hover:text-white"
-  }`;
 
 export function SidebarNav({ admin, busy, onLogout }) {
   const [open, setOpen] = useState(false);
@@ -27,7 +20,8 @@ export function SidebarNav({ admin, busy, onLogout }) {
         <Link
           onClick={close}
           to="/"
-          className="text-white focus-visible:outline-3 focus-visible:outline-offset-3 focus-visible:outline-focus"
+          variant="plain"
+          className="text-white"
         >
           <Brand />
         </Link>
@@ -37,10 +31,9 @@ export function SidebarNav({ admin, busy, onLogout }) {
           className="lg:hidden"
           aria-expanded={open}
           aria-controls="workspace-menu"
+          text="Menú"
           onClick={() => setOpen(!open)}
-        >
-          Menú
-        </Button>
+        />
       </div>
       <div
         id="workspace-menu"
@@ -65,27 +58,28 @@ export function SidebarNav({ admin, busy, onLogout }) {
         </div>
         <nav
           aria-label="Navegación del panel"
-          className=" flex flex-col gap-1.5"
+          className="flex flex-col gap-1.5"
         >
-          <NavLink onClick={close} to="/" end className={navLinkClass}>
-            <FiGrid aria-hidden="true" className="text-lg shrink-0" />
-            <span>Escritorio</span>
-          </NavLink>
+          <Link nav onClick={close} to="/" end>
+            <FiGrid aria-hidden="true" className="shrink-0 text-lg" />
+            <Paragraph as="span" text="Escritorio" />
+          </Link>
           {visibleAreas.map(({ slug, path, Icon, title, pending }) => (
-            <NavLink
-              onClick={close}
-              key={slug}
-              to={path}
-              className={navLinkClass}
-            >
-              <Icon aria-hidden="true" className="text-lg shrink-0" />
-              <span>
+            <Link nav onClick={close} key={slug} to={path}>
+              <Icon aria-hidden="true" className="shrink-0 text-lg" />
+              <Paragraph as="span">
                 {title}
                 {pending && (
-                  <small className="block font-normal">En preparación</small>
+                  <Paragraph
+                    as="span"
+                    size="small"
+                    weight="normal"
+                    text="En preparación"
+                    className="block"
+                  />
                 )}
-              </span>
-            </NavLink>
+              </Paragraph>
+            </Link>
           ))}
         </nav>
         <div className="mt-auto border-t border-white/15 pt-4">

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { copyText } from "../../../services/copyText";
 import { Button } from "../../atoms/button";
+import { Code } from "../../atoms/code";
 import { Paragraph } from "../../atoms/paragraph";
 
 export function RecoveryCodes({ codes, onSaved }) {
@@ -25,7 +26,7 @@ export function RecoveryCodes({ codes, onSaved }) {
       <ul className="my-4.5 grid list-none gap-1 rounded-[7px] bg-soft p-3.5">
         {codes.map((code) => (
           <li key={code}>
-            <code className="wrap-anywhere">{code}</code>
+            <Code text={code} />
           </li>
         ))}
       </ul>

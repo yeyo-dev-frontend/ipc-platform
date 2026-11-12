@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
-import QRCode from "qrcode";
 import { Image } from "@ipc/image";
+import { renderQrWithLogo } from "../../../services/renderQrWithLogo";
+import { Code } from "../../atoms/code";
 import { Paragraph } from "../../atoms/paragraph";
 
 export function AuthenticatorSetup({ provisioningUri, secret }) {
@@ -13,7 +14,7 @@ export function AuthenticatorSetup({ provisioningUri, secret }) {
       setFailed(true);
       return;
     }
-    QRCode.toDataURL(provisioningUri, { margin: 4, scale: 6 }).then(
+    renderQrWithLogo(provisioningUri).then(
       (url) => {
         if (active) setSource(url);
       },
@@ -28,24 +29,30 @@ export function AuthenticatorSetup({ provisioningUri, secret }) {
 
   return (
     <>
-      <Paragraph>
-        {failed
-          ? "No se pudo mostrar el QR. Usa la clave manual para configurar el autenticador."
-          : "En Authy u otra aplicación autenticadora, añade una cuenta y escanea este QR."}
-      </Paragraph>
+      <Paragraph
+        text={
+          failed
+            ? "No se pudo mostrar el QR. Usa la clave manual para configurar el autenticador."
+            : "En Authy u otra aplicación autenticadora, añade una cuenta y escanea este QR."
+        }
+      />
       <Image
         src={failed ? null : source}
         alt="QR para configurar el autenticador de IPC"
-        className="my-4 aspect-square w-[min(100%,240px)] bg-blue-dark"
-        imageClassName="[image-rendering:pixelated]"
+        className="my-4 aspect-square w-[min(100%,240px)] rounded-xl border border-line bg-blue-dark shadow-xs"
         loading="eager"
         onError={() => setFailed(true)}
       />
       <details open={failed || undefined}>
-        <summary className="cursor-pointer text-blue-dark">
-          Introducir la clave manualmente
+        <summary className="cursor-pointer">
+          <Paragraph
+            as="span"
+            variant="institutional"
+            weight="semi"
+            text="Introducir la clave manualmente"
+          />
         </summary>
-        <code className="wrap-anywhere">{secret}</code>
+        <Code text={secret} className="mt-1.5 block" />
       </details>
     </>
   );

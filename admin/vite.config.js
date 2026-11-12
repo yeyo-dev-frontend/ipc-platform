@@ -16,6 +16,7 @@ export default defineConfig({
     dedupe: ["react", "react-dom"],
     alias: {
       "@ipc/image": resource("../frontend/src/components/atoms/image.jsx"),
+      "@ipc/logo": resource("../frontend/public/LOGO.webp"),
       "@ipc/campus": resource(
         "../frontend/src/assets/images/studentLife/fachada.webp",
       ),

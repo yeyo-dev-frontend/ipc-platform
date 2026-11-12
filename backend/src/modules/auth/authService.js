@@ -10,6 +10,9 @@ export async function createAuthService(repository, config) {
   const mfa = createMfaService(repository, tokens, config);
   return {
     listAccounts: repository.listAccounts,
+    async deactivateAccount(actor, id, requestId) {
+      return { admin: await repository.deactivateAccount(actor, id, requestId) };
+    },
     ...mfa,
     ...createInvitationService(repository),
     ...(await createLoginService(repository, mfa)),

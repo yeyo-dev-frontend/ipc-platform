@@ -21,6 +21,7 @@ import {
   UNCONFIRMED_RECOVERY_NOTICE,
 } from "./services/session/recoveryPending";
 import { Button } from "./components/atoms/button";
+import { Paragraph } from "./components/atoms/paragraph";
 
 function AdminApp() {
   const [restoring, setRestoring] = useState(true);
@@ -59,12 +60,15 @@ function AdminApp() {
   if (restoring || waiting)
     return (
       <main className="grid min-h-svh place-content-center gap-4 bg-surface p-6 text-center">
-        <p role="status">
-          {restoring ? "Recuperando sesión…" : notice || WAITING_NOTICE}
-        </p>
+        <Paragraph
+          role="status"
+          align="center"
+          text={restoring ? "Recuperando sesión…" : notice || WAITING_NOTICE}
+        />
         {waiting && !restoring && (
           <Button
             variant="secondary"
+            text="Cancelar el acceso pendiente"
             onClick={async () => {
               try {
                 await logoutSession(UNCONFIRMED_RECOVERY_NOTICE);
@@ -73,9 +77,7 @@ function AdminApp() {
                 setNotice(error.message);
               }
             }}
-          >
-            Cancelar el acceso pendiente
-          </Button>
+          />
         )}
       </main>
     );
